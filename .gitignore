@@ -1,0 +1,34 @@
+# --- R files ---
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# --- Python files ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+.venv/
+env/
+venv/
+.ipynb_checkpoints/
+
+# --- Quarto build artifacts ---
+.quarto/
+_freeze/
+*.html      # ignore rendered HTML files
+# keep PDFs so instructors can review output
+
+# --- Jupyter (if any students use it) ---
+*.ipynb
+.ipynb_checkpoints/
+
+# --- Positron / VSCode ---
+.vscode/
+*.code-workspace
+
+# --- Mac / OS junk ---
+.DS_Store
+Thumbs.db

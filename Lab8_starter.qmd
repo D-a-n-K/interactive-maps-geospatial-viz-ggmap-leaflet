@@ -1,0 +1,1049 @@
+---
+title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
+author: "Team Name: [Add Team Name] | Team Members: [Add All Member Names]"
+date: today
+format: 
+  pdf:
+    titlepage: true
+    toc: true
+    toc-depth: 2
+    code-block-wrap: true
+execute:
+  freeze: auto
+  echo: true
+  python:
+    executable: "path/to/your/python"  # UPDATE THIS PATH
+editor: source
+---
+
+# Lab Overview
+
+## Learning Objectives
+
+### Technical Learning Objectives
+1. Understand the "Grammar of Graphics" in ggplot2
+2. Implement data visualizations in both R and Python
+3. Create interactive visualizations using htmlwidgets
+4. Build dashboards using Shiny (for R) and Streamlit (for Python)
+5. Master collaborative coding workflows using Git branches and Pull Requests
+
+### Business Learning Objectives
+1. Understand the role of data visualization in data science and analytics
+2. Learn strategies for presenting data through effective visualizations
+3. Understand the power of interactive dashboards for business communication
+4. Practice collaborative development workflows used in professional settings
+
+---
+
+## Lab Description
+
+This lab combines two major learning objectives:
+
+1. **Data Visualization Mastery**: A deep dive into visualization techniques in both R (ggplot2) and Python (matplotlib, seaborn)
+2. **Collaborative Coding Workflows**: Hands-on practice with Git branching, Pull Requests, code review, and merge conflict resolution
+
+You will work in **teams of 3-4 students** based on your assigned Peer Support Groups. Remember, these Peer Support Groups are available within Canvas, along with communication tools for the group. Each team member will be responsible for one major part of the lab, working on their own Git branch, and then integrating everyone's work through Pull Requests. If you are unsure about your Peer Support Group assignment, please contact the instructor or teaching assistant. Also, if your team only has 3 members, you should decide as a group how to divide the work for the four parts.
+
+---
+
+## Team Members & Roles
+
+<!-- CONFLICT ZONE 1: Each team member adds their information here -->
+<!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
+
+**Instructions:** Each team member should add a bullet point below with:
+- Your full name
+- Your assigned role (Part 1, 2, 3, or 4)
+- A brief description of your responsibility
+
+**Example format:**
+- Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
+
+**Team Member List:**
+
+[Each team member adds their line here]
+
+<!-- End of Team Members section -->
+
+---
+
+## Collaborative Workflow Overview
+
+**IMPORTANT**: This lab uses a collaborative Git workflow. Here's the process:
+
+1. **Clone the repository** - Everyone starts with the same starter file
+2. **Create your branch** - Each person creates their own branch (e.g., `part1-ggplot2`, `part2-advanced`, etc.)
+3. **Work independently** - Complete your assigned part on your branch
+4. **Commit regularly** - Make frequent, meaningful commits
+5. **Open Pull Request** - When ready, create a PR for your work
+6. **Code review** - Review at least one teammate's PR and provide feedback
+7. **Merge** - After approval, merge your PR (resolve conflicts as needed!)
+8. **Final integration** - Once all PRs are merged, assign one temember to render final document to PDF and upload to Canvas for this group assignment (only one person needs to upload the final PDF).
+
+**Timeline**: You have **two weeks** to complete this lab.
+
+---
+
+## Lab Structure
+
+This lab has **five required parts** and **two optional parts**:
+
+### Required Parts (Collaborative - divide among team):
+- **Part 1:** ggplot2 Fundamentals (Role 1) - Deliverables 1-16
+- **Part 2:** Advanced ggplot2 & External Data (Role 2) - Deliverables 17-29
+- **Part 3:** Python Visualization (Role 3) - Deliverables 30-35
+- **Part 4 & 5:** Dashboards with Shiny & Streamlit (Role 4) - Deliverables 36-40
+
+### Optional Parts (Individual - after team submission):
+- **Part 6:** Interactive Visualizations with htmlwidgets
+- **Part 7:** Google Maps API Visualization
+
+I encourage you to work on the optional parts individually after completing the required sections, as they are not part of the team submission. Both of these optional parts contain valuable visualization techniques that will enhance your skills.
+---
+
+# Setup and Preparation
+
+```{r}
+#| label: setup-reticulate
+#| echo: false
+#| message: false
+
+# Set up Python environment
+# UPDATE THE PATH BELOW TO YOUR PYTHON ENVIRONMENT
+library(reticulate)
+use_condaenv("path/to/your/python/environment", required = TRUE)
+```
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+
+# Load all required libraries for the lab
+library(tidyverse)
+library(ggplot2)
+library(highcharter)
+library(plotly)
+library(leaflet)
+library(sf)
+library(jsonlite)
+library(htmlwidgets)
+library(webshot)
+library(magick)
+library(reticulate)
+library(ggmap)
+library(tm)
+library(tidytext)
+library(devtools)
+library(geojsonio)
+library(Rserve)
+library(ggthemes)
+library(DT)
+library(gapminder)
+library(oidnChaRts)
+library(webshot2)
+
+# If you are completing the optional Part 6, ensure webshot2 is installed and configured using the commands below:
+
+# Ensure PhantomJS is installed for webshot
+if (!webshot::is_phantomjs_installed()) {
+  webshot::install_phantomjs()
+}
+
+# If you are completing the optional Part 7, set up Google API key. Once you have your API key, replace the "GOOGLE_API_KEY" value below with your actual key. Remember to always keep those API keys secure and do not share them publicly.
+
+# Google API key setup (for optional Part 7)
+if (Sys.getenv("GOOGLE_API_KEY") != "") {
+  ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
+} else {
+  message("No Google API Key found - OK for required parts")
+}
+```
+
+---
+
+# Introduction
+
+<!-- Shared section: Brief introduction to your team's visualization work -->
+<!-- After all parts are complete, collaboratively write 2-3 sentences introducing your analysis -->
+
+**Instructions**: After completing all individual sections, your team should work together to write a brief introduction here (2-3 sentences) describing the overall focus and approach of your visualization work.
+
+[Team will add introduction here]
+
+---
+
+# Methods Overview
+
+<!-- CONFLICT ZONE 2: Each team member adds their methodology here -->
+<!-- After completing your section, add 2-3 sentences describing your approach -->
+
+**Instructions:** After finishing your assigned part, come back here and add a brief paragraph (2-3 sentences) describing:
+- What visualization techniques you used
+- What packages/tools you employed
+- What insights your visualizations revealed
+
+**Format:** 
+```
+**[Your Name] - Part [X]:** [Your methodology description]
+```
+
+[Each team member adds their methodology here]
+
+<!-- End of Methods Overview -->
+
+---
+
+# Part 1: Data Visualization Using ggplot2
+
+**👤 Assigned to: Role 1 - ggplot2 Fundamentals**
+
+**Deliverables: 1-16**
+
+**Focus:** Understanding the Grammar of Graphics, exploring basic ggplot2 functionality with the diamonds dataset
+
+---
+
+## Deliverable 1: Get Working Directory
+
+**Instructions:** Get and display your current working directory.
+
+```{r}
+#| label: working-directory
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 2: Not assigned (setup already complete above)
+
+The setup chunk has already loaded all required libraries.
+
+---
+
+## Deliverable 3: Get and Explore the Diamonds Dataset
+
+**Instructions:** Load the diamonds dataset using `data()`, then explore it using `head()` and `tail()`.
+
+```{r}
+#| label: explore-diamonds
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 4: Create a Histogram in Base R
+
+**Instructions:** Use `hist()` to create a histogram of diamond carats. Include a main title "Carat Histogram" and x-axis label "Carat".
+
+```{r}
+#| label: baseR-histogram
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 5: Create a Scatterplot in Base R
+
+**Instructions:** Create a scatterplot of price vs carat using Base R's `plot()` function.
+
+```{r}
+#| label: baseR-scatterplot
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+**Bonus:** Try the alternative approach without the formula interface.
+
+```{r}
+#| label: alternative-baseR-scatterplot
+#| echo: true
+
+# Role 1: Add your code here (alternative approach)
+
+```
+
+---
+
+## Deliverable 6: Build a Boxplot in Base R
+
+**Instructions:** Create a boxplot of diamond carats using `boxplot()`.
+
+```{r}
+#| label: baseR-boxplot
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 7: Create a Blank ggplot Canvas
+
+**Instructions:** Call `ggplot()` with no arguments to see an empty canvas.
+
+```{r}
+#| label: blank-canvas
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 8: Rebuild the Histogram with ggplot2
+
+**Instructions:** Create a histogram using `ggplot()` + `geom_histogram()`, mapping carat to x.
+
+```{r}
+#| label: ggplot-histogram
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 9: Build a Density Plot
+
+**Instructions:** Create a density plot using `geom_density()` with `fill = "grey50"`.
+
+```{r}
+#| label: ggplot-density
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 10: Build a Scatterplot with ggplot
+
+**Instructions:** Create a scatterplot using `geom_point()`, mapping carat to x and price to y.
+
+```{r}
+#| label: ggplot-scatterplot
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 11: Create ggplot Object and Add Color
+
+**Instructions:** Save the ggplot basics to an object called `g`, then recreate the plot with color mapped to the 'color' variable.
+
+```{r}
+#| label: ggplot-object-color
+#| echo: true
+
+# Role 1: Create the 'g' object
+
+# Role 1: Recreate the plot with the 'g' object
+
+# Role 1: Add color aesthetic
+
+```
+
+---
+
+## Deliverable 12: Demonstrate Facet Wrap
+
+**Instructions:** Create a faceted scatterplot using `facet_wrap()`, faceting by the 'color' variable.
+
+```{r}
+#| label: facet-wrap
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 13: Demonstrate Facet Grid
+
+**Instructions:** Create a facet grid using `facet_grid()` with cut on rows and color on columns.
+
+```{r}
+#| label: facet-grid
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 14: Facet Wrap with Histogram
+
+**Instructions:** Create faceted histograms of carat, faceting by color.
+
+```{r}
+#| label: facet-histogram
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+## Deliverable 15: Demonstrate Boxplots
+
+**Instructions:** Create boxplots showing carat distribution by cut.
+
+```{r}
+#| label: ggplot-boxplot
+#| echo: true
+
+# Role 1: Add your code here for y = carat, x = 1
+
+# Role 1: Add your code here for y = carat, x = cut
+
+```
+
+---
+
+## Deliverable 16: Demonstrate Violin Plots
+
+**Instructions:** Create violin plots showing carat distribution by cut.
+
+```{r}
+#| label: violin-plot
+#| echo: true
+
+# Role 1: Add your code here
+
+```
+
+---
+
+**Role 1 Complete!** 
+
+**Next steps:**
+1. Add your methodology to the "Methods Overview" section above (2-3 sentences describing your approach)
+2. Test by rendering the document one final time
+3. Commit your changes with a meaningful message
+4. Push your branch to GitHub
+5. Open a Pull Request
+
+---
+
+# Part 2: Advanced ggplot2 & External Data Visualization
+
+**Assigned to: Role 2 - Advanced ggplot2 & External Data**
+
+**Deliverables: 17-29**
+
+**Focus:** Working with external data, advanced customization, themes, annotations
+
+---
+
+## Deliverable 17: Read and Explore College Dataset
+
+**Instructions:** Read the college CSV from the web, then explore with `head()`, `tail()`, `class()`, and `summary()`.
+
+```{r}
+#| label: read-college
+#| echo: true
+
+# Role 2: Read college data from URL
+# URL: 'http://672258.youcanlearnit.net/college.csv'
+
+# Role 2: Explore the data
+
+```
+
+---
+
+## Deliverable 18: Wrangle the College Data
+
+**Instructions:** Convert character variables to factors using `mutate()` and `as.factor()`. Variables: state, region, highest_degree, control, gender. Also convert loan_default_rate to numeric.
+
+```{r}
+#| label: wrangle-college
+#| echo: true
+
+# Role 2: Add your code here
+
+# Role 2: Re-summarize to see the changes
+
+```
+
+---
+
+## Deliverable 19: Create Basic Scatterplot
+
+**Instructions:** Create a scatterplot of tuition vs sat_avg.
+
+```{r}
+#| label: college-scatterplot
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 20: Add Shape Control
+
+**Instructions:** Add shape aesthetic mapped to control variable.
+
+```{r}
+#| label: shape-control
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 21: Add Color Control
+
+**Instructions:** Change to color aesthetic mapped to control variable.
+
+```{r}
+#| label: color-control
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 22: Add Size Aesthetic and Interpret
+
+**Instructions:** Add size aesthetic mapped to undergrads variable. Then provide your interpretation.
+
+```{r}
+#| label: size-aesthetic
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+**Interpretation:** [Add your interpretation of this visualization here]
+
+---
+
+## Deliverable 23: Add Alpha (Opacity)
+
+**Instructions:** Add alpha parameter to control transparency (try `alpha = 1/2`).
+
+```{r}
+#| label: alpha-opacity
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 24: Add Line Plot and Smooth
+
+**Instructions:** Create both a line plot (`geom_line()`) and smooth line (`geom_smooth()`).
+
+```{r}
+#| label: line-plot
+#| echo: true
+
+# Role 2: Line plot
+
+# Role 2: Smooth line
+
+```
+
+---
+
+## Deliverable 25: Create Bar Graph
+
+**Instructions:** Create a bar graph showing schools by region, using fill aesthetic for control variable. Include theme and scale customizations.
+
+```{r}
+#| label: bar-graph
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 26: Change Bar Colors
+
+**Instructions:** Use `scale_fill_manual()` to set custom colors (orange and blue).
+
+```{r}
+#| label: bar-colors
+#| echo: true
+
+# Role 2: Add your code here
+
+```
+
+---
+
+## Deliverable 27: Customize Legends
+
+**Instructions:** Adjust legend title, layout (nrow=1), label position, keywidth, and overall position.
+
+```{r}
+#| label: customize-legends
+#| echo: true
+
+# Role 2: Add legend title and nrow=1
+
+# Role 2: Add label.position = "bottom"
+
+# Role 2: Add keywidth = 2.5
+
+# Role 2: Add legend.position = "top"
+
+```
+
+---
+
+## Deliverable 28: Add Annotations
+
+**Instructions:** Add text annotations and reference lines using `annotate()`, `geom_hline()`, and `geom_vline()`. Label "Elite Privates" and add mean lines.
+
+**Note:** Use `ggplot2::annotate()` to avoid conflicts with NLP package.
+
+```{r}
+#| label: annotations
+#| echo: true
+
+# Role 2: Add your code here
+
+# Role 2: Remove panel background for cleaner look
+
+# Role 2: Add scale customizations
+
+# Role 2: Change legend position to bottom and add title
+
+```
+
+---
+
+## Deliverable 29: Explore Themes
+
+**Instructions:** Apply different themes to bar graphs. Try: default, theme_bw(), theme_minimal(), theme_void(), theme_dark(), theme_solarized(), theme_excel(), theme_wsj(), theme_economist(), theme_economist_white(), theme_fivethirtyeight().
+
+```{r}
+#| label: explore-themes
+#| echo: true
+
+# Role 2: Default theme
+
+# Role 2: Try different themes (add code for each)
+
+```
+
+---
+
+**Role 2 Complete!** 
+
+**Next steps:**
+1. Add your methodology to the "Methods Overview" section above (2-3 sentences describing your approach)
+2. Test by rendering the document one final time
+3. Commit your changes with a meaningful message
+4. Push your branch to GitHub
+5. Open a Pull Request
+
+---
+
+# Part 3: Data Visualization in Python
+
+**👤 Assigned to: Role 3 - Python Visualization**
+
+**📊 Deliverables: 30-35**
+
+**🎯 Focus:** Python visualization with matplotlib, seaborn, and NLTK text analysis
+
+---
+
+## Deliverable 30: Prepare Python Environment
+
+**Instructions:** Verify Python is working by printing "Hello, Python in Quarto".
+
+```{python}
+#| label: hello-python
+#| echo: true
+
+# Role 3: Add your code here
+
+```
+
+---
+
+## Deliverable 31: Import Python Libraries and Prepare Data
+
+**Instructions:** Import matplotlib.pyplot as plt, seaborn as sns, and pandas as pd. Then load the tips dataset and create a bar chart of average tips by day.
+
+```{python}
+#| label: import-and-tips
+#| echo: true
+
+# Role 3: Import libraries
+
+# Role 3: Load tips dataset
+
+# Role 3: Calculate average tips by day
+
+# Role 3: Create bar chart
+
+```
+
+---
+
+## Deliverable 32: Create Seaborn Boxplot
+
+**Instructions:** Create a boxplot showing tip distribution by day using seaborn.
+
+```{python}
+#| label: seaborn-boxplot
+#| echo: true
+
+# Role 3: Add your code here
+
+```
+
+---
+
+## Deliverable 33: Customize Plot with Theme
+
+**Instructions:** Apply seaborn theme and custom color palette (pastel).
+
+```{python}
+#| label: customize-seaborn
+#| echo: true
+
+# Role 3: Add your code here
+
+```
+
+---
+
+## Deliverable 34: Prepare Text Data for Visualization
+
+**Instructions:** Import NLTK, load inaugural corpus, explore Obama's 2009 speech, tokenize, clean (remove punctuation and stopwords), and preview.
+
+```{python}
+#| label: text-data-prep
+#| echo: true
+
+# Role 3: Import NLTK and download data
+
+# Role 3: Load and explore Obama's speech
+
+# Role 3: Tokenize and clean
+
+```
+
+---
+
+## Deliverable 35: Visualize Text Data
+
+**Instructions:** Calculate word frequencies, get top 10 most common words, convert to DataFrame, and create bar chart.
+
+```{python}
+#| label: text-visualization
+#| echo: true
+
+# Role 3: Calculate word frequency
+
+# Role 3: Get top 10 words
+
+# Role 3: Create DataFrame
+
+# Role 3: Plot
+
+```
+
+---
+
+**Role 3 Complete!** 
+
+**Next steps:**
+1. Add your methodology to the "Methods Overview" section above (2-3 sentences describing your approach)
+2. Test by rendering the document one final time
+3. Commit your changes with a meaningful message
+4. Push your branch to GitHub
+5. Open a Pull Request
+
+---
+
+# Part 4 & 5: Building Dashboards with Shiny and Streamlit
+
+**👤 Assigned to: Role 4 - Dashboards**
+
+**📊 Deliverables: 36-40**
+
+**🎯 Focus:** Creating interactive dashboards in R (Shiny) and Python (Streamlit)
+
+---
+
+## Deliverable 36: Install Shiny Packages
+
+**Instructions:** Install shiny and shinydashboard packages (code is commented out - only run once).
+
+```{r}
+#| label: install-shiny
+#| echo: true
+
+# Role 4: Uncomment and run once to install
+# install.packages("shiny")
+# install.packages("shinydashboard")
+
+```
+
+---
+
+## Deliverable 37: Explore Shiny Examples
+
+**Instructions:** Run several built-in Shiny examples to see what's possible.
+
+**Note:** These run interactively in your console - not in the rendered document.
+
+```{r}
+#| label: shiny-examples
+#| eval: false
+#| echo: true
+
+# Role 4: Run these in your console (one at a time)
+library(shiny)
+# runExample("01_hello")
+# runExample("02_text")
+# runExample("03_reactivity")
+# runExample("04_mpg")
+# runExample("05_sliders")
+# runExample("06_tabsets")
+# runExample("07_widgets")
+# runExample("08_html")
+# runExample("09_upload")
+# runExample("10_download")
+# runExample("11_timer")
+
+```
+
+---
+
+## Deliverable 38: Create RShiny App
+
+**Instructions:** Create a basic RShiny app using the app.R template file.
+
+**Steps:**
+1. Open the app.R file in your repository
+2. Customize the title with your name
+3. Run in console: `shiny::runApp("app.R")`
+4. Explore the app
+5. Stop the server (red square or Ctrl+C)
+
+**Document your experience:**
+
+```
+# Role 4: Shiny App Documentation
+
+**What I created:** [Describe your app]
+
+**Customizations made:** [List changes from template]
+
+**How to run:** Run `shiny::runApp("app.R")` in R console
+
+**Screenshots:** [Note: Include screenshots in your final submission]
+```
+
+[Add your documentation here]
+
+---
+
+## Deliverable 39: Create PyShiny App
+
+**Instructions:** Create a PyShiny app using the app.py template file.
+
+**Steps:**
+1. Open the app.py file in your repository
+2. Ensure Python environment is active
+3. Run in terminal: `shiny run --reload app.py --port 8501`
+4. Explore the app
+5. Compare with RShiny version
+
+**Document your experience:**
+
+```
+# Role 4: PyShiny App Documentation
+
+**What I created:** [Describe your app]
+
+**Customizations made:** [List changes from template]
+
+**How to run:** Run `shiny run --reload app.py --port 8501` in terminal
+
+**Comparison to RShiny:** [Note similarities/differences]
+```
+
+[Add your documentation here]
+
+---
+
+## Deliverable 40: Create Streamlit App
+
+**Instructions:** Create a Streamlit dashboard using the streamlit_app.py template file.
+
+**Steps:**
+1. Open the streamlit_app.py file in your repository
+2. Ensure Python environment is active
+3. Run in terminal: `streamlit run streamlit_app.py --server.port 8502`
+4. Explore the app
+5. Compare with Shiny versions
+
+**Document your experience:**
+
+```
+# Role 4: Streamlit App Documentation
+
+**What I created:** [Describe your app]
+
+**Customizations made:** [List changes from template]
+
+**How to run:** Run `streamlit run streamlit_app.py --server.port 8502` in terminal
+
+**Comparison to Shiny/PyShiny:** [Note key differences]
+
+**Which do you prefer and why?** [Your opinion]
+```
+
+[Add your documentation here]
+
+---
+
+**Role 4 Complete!** 
+
+**Next steps:**
+1. Ensure all three app files (app.R, app.py, streamlit_app.py) are in your repository
+2. Add your methodology to the "Methods Overview" section above (2-3 sentences describing your approach)
+3. Test by rendering the document one final time
+4. Commit your changes with meaningful messages
+5. Push your branch to GitHub
+6. Open a Pull Request
+7. Include app files in final submission
+
+---
+
+# Results and Discussion
+
+<!-- Shared section: Team synthesizes findings -->
+<!-- After all parts are complete, work together to write key insights -->
+
+**Instructions:** Once all individual parts are complete, your team should collaboratively write a "Results and Discussion" section here (1-2 paragraphs) that:
+- Synthesizes insights from all four parts
+- Compares R vs Python visualization approaches
+- Discusses strengths of different visualization types
+- Reflects on the dashboard tools
+
+[Team will add results and discussion here]
+
+---
+
+# Conclusion
+
+<!-- Shared section: Brief conclusion -->
+<!-- Team writes 2-3 sentences about lessons learned -->
+
+**Instructions:** After completing all sections, write a brief conclusion (2-3 sentences) about:
+- What you learned about data visualization
+- What you learned about collaborative coding
+- How these skills apply to real-world data science
+
+[Team will add conclusion here]
+
+---
+
+# Appendix: Collaborative Workflow Summary
+
+## Git Workflow Used
+
+[Describe your team's Git workflow: How did you divide work? How did you handle merges? What challenges did you face?]
+
+## Pull Requests
+
+| Team Member | PR Title | PR # | Reviewers | Status |
+|------------|----------|------|-----------|--------|
+| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
+| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
+| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
+| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
+
+## Merge Conflicts Encountered
+
+[Describe any merge conflicts you encountered and how you resolved them]
+
+## Lessons Learned
+
+[What did your team learn about collaborative coding?]
+
+---
+
+# Role Responsibilities Reference
+
+## Role 1: ggplot2 Fundamentals
+- **Part 1:** Basic ggplot2 visualizations with diamonds dataset
+- **Focus:** Grammar of graphics, geoms, faceting, base R comparison
+- **Deliverables:** 1-16
+- **Branch name suggestion:** `part1-ggplot2-basics`
+
+## Role 2: Advanced ggplot2 & External Data
+- **Part 2:** External data, advanced customization, themes
+- **Focus:** College dataset, annotations, legends, theme exploration
+- **Deliverables:** 17-29
+- **Branch name suggestion:** `part2-ggplot2-advanced`
+
+## Role 3: Python Visualization
+- **Part 3:** Python matplotlib, seaborn, NLTK
+- **Focus:** Tips dataset, text visualization, Python plotting
+- **Deliverables:** 30-35
+- **Branch name suggestion:** `part3-python-viz`
+
+## Role 4: Dashboards
+- **Parts 4 & 5:** Shiny, PyShiny, and Streamlit
+- **Focus:** Interactive dashboard creation in R and Python
+- **Deliverables:** 36-40
+- **Branch name suggestion:** `part4-dashboards`
+
+---
+
+**Due Date:** [Two weeks from assignment date]
+
+**Submission Requirements:**
+1. All team members' Pull Requests merged to main
+2. Final rendered PDF submitted to Canvas
+3. Dashboard files (app.R, app.py, streamlit_app.py) included in repository
+4. Complete documentation of collaborative workflow
+
+---
+
+**Good luck with your collaborative visualization project!**
