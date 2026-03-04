@@ -1,18 +1,21 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: [Add Team Name] | Team Members: [Add All Member Names]"
+author: "Team Name: Hope Tatenda Mutema | Team Members: Taib"
 date: today
 format: 
   pdf:
     titlepage: true
     toc: true
     toc-depth: 2
-    code-block-wrap: true
+    include-in-header: 
+      text: |
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 execute:
-  freeze: auto
   echo: true
-  python:
-    executable: "path/to/your/python"  # UPDATE THIS PATH
+  warning: false
+  message: false
+  python: "/opt/anaconda3/envs/TextMiningLLM/bin/python"
 editor: source
 ---
 
@@ -101,18 +104,21 @@ This lab has **five required parts** and **two optional parts**:
 I encourage you to work on the optional parts individually after completing the required sections, as they are not part of the team submission. Both of these optional parts contain valuable visualization techniques that will enhance your skills.
 ---
 
-# Setup and Preparation
+# Reticulate setup
+
+The belt and suspenders approach to ensure I am using the correct Python environment. This along with the python path specified in the YAML header, and the Select Interpreter button will ensure the correct Python environment is used for this lab for both interactive work and when rendering the document.
 
 ```{r}
 #| label: setup-reticulate
-#| echo: false
-#| message: false
-
-# Set up Python environment
-# UPDATE THE PATH BELOW TO YOUR PYTHON ENVIRONMENT
 library(reticulate)
-use_condaenv("path/to/your/python/environment", required = TRUE)
+
+# Set Python path BEFORE loading spacyr - this is critical!
+Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+
+use_condaenv("TextMiningLLM", required = TRUE)
 ```
+
 
 ```{r}
 #| label: setup
