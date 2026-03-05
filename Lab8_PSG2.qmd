@@ -55,12 +55,10 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 <!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
 
 **Instructions:** Each team member should add a bullet point below with:
-- Your full name
-- Your assigned role (Part 1, 2, 3, or 4)
-- A brief description of your responsibility
+- **Hope Tatenda Mutema**
+- Part 1: ggplot2 Fundamentals, Part 2: Advanced ggplot2 & External Data
+- I will focus on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
 
-**Example format:**
-- Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
 
 **Team Member List:**
 
@@ -192,7 +190,7 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 
 **Format:** 
 ```
-**[Your Name] - Part [X]:** [Your methodology description]
+**Hope Tatenda Mutema - Part 1:** I focused on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
 ```
 
 [Each team member adds their methodology here]
@@ -203,13 +201,27 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 
 # Part 1: Data Visualization Using ggplot2
 
-**👤 Assigned to: Role 1 - ggplot2 Fundamentals**
+**👤 Assigned to Hope Tatenda Mutema: Role 1 - ggplot2 Fundamentals**
 
 **Deliverables: 1-16**
 
 **Focus:** Understanding the Grammar of Graphics, exploring basic ggplot2 functionality with the diamonds dataset
 
 ---
+## Loading Necessary Libraries
+
+Loading necessary libraries for the first part of the lab. Note that some of these libraries will be used in later parts, but we are loading them all here for convenience for example, geojsonio, ggmap,highcharter, leaflet”, plotly, Rserve, sf, ggthemes,DT, gapminder, devtools and remotes.
+
+```{r}
+#| label: load-libraries
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(DT)
+library(gapminder)
+library(devtools)
+library(remotes)
+```
 
 ## Deliverable 1: Get Working Directory
 
