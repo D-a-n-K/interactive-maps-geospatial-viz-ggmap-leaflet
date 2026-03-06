@@ -221,6 +221,14 @@ library(DT)
 library(gapminder)
 library(devtools)
 library(remotes)
+library(highcharter)
+library(plotly)
+library(leaflet)
+library(sf)
+library(geojsonio)
+library(Rserve)
+library(ggmap)
+library(oidnChaRts)
 ```
 
 ## Deliverable 1: Get Working Directory
@@ -230,9 +238,7 @@ library(remotes)
 ```{r}
 #| label: working-directory
 #| echo: true
-
-# Role 1: Add your code here
-
+getwd()
 ```
 
 ---
@@ -243,44 +249,78 @@ The setup chunk has already loaded all required libraries.
 
 ---
 
+## Google API setup 
+
+```{r}
+#| label: google-api-setup
+# Set and register Google API key
+Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
+ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
+
+# Use the correct conda environment
+reticulate::use_condaenv("TextMiningLLM", required = TRUE)
+
+# Verify Python configuration (optional)
+# reticulate::py_config()
+
+# Ensure PhantomJS is installed for webshot rendering
+if (!webshot::is_phantomjs_installed()) {
+  webshot::install_phantomjs()
+}
+```
+
+## Test if the Google API key is working 
+
+```{r}
+#| label: test-google-api
+print(Sys.getenv("GOOGLE_API_KEY"))
+ggmap::has_google_key()
+reticulate::py_config()
+webshot::is_phantomjs_installed()
+```
+
 ## Deliverable 3: Get and Explore the Diamonds Dataset
+
+Beginning our ggplot2 exploration with the built-in diamonds dataset.
 
 **Instructions:** Load the diamonds dataset using `data()`, then explore it using `head()` and `tail()`.
 
 ```{r}
 #| label: explore-diamonds
 #| echo: true
-
-# Role 1: Add your code here
-
+data(diamonds)
+head(diamonds)
+tail(diamonds)
 ```
 
 ---
 
 ## Deliverable 4: Create a Histogram in Base R
 
+First, looking at building basic visualizations using Base R before we dive into ggplot2. 
+
 **Instructions:** Use `hist()` to create a histogram of diamond carats. Include a main title "Carat Histogram" and x-axis label "Carat".
+
+We will be using the hist() function from base R, the histogram main label will be "Carat Histogram" and the x-axis label will be "Carat".
 
 ```{r}
 #| label: baseR-histogram
 #| echo: true
-
-# Role 1: Add your code here
-
+hist(diamonds$carat, main = "Carat Histogram", xlab = "Carat")
 ```
 
 ---
 
 ## Deliverable 5: Create a Scatterplot in Base R
 
+Creating a Scatterplot of "diamonds" using base R. 
+
 **Instructions:** Create a scatterplot of price vs carat using Base R's `plot()` function.
 
 ```{r}
 #| label: baseR-scatterplot
 #| echo: true
-
-# Role 1: Add your code here
-
+plot(price ~ carat, data = diamonds)
 ```
 
 **Bonus:** Try the alternative approach without the formula interface.
@@ -288,9 +328,7 @@ The setup chunk has already loaded all required libraries.
 ```{r}
 #| label: alternative-baseR-scatterplot
 #| echo: true
-
-# Role 1: Add your code here (alternative approach)
-
+plot(diamonds$carat, diamonds$price, xlab = "Carat", ylab = "Price", main = "Price vs Carat")
 ```
 
 ---
