@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: Hope Tatenda Mutema | Team Members: Taib"
+author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel, and Jaclyn"
 date: today
 format: 
   pdf:
@@ -55,16 +55,14 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 <!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
 
 **Instructions:** Each team member should add a bullet point below with:
-- Your full name
-- Your assigned role (Part 1, 2, 3, or 4)
-- A brief description of your responsibility
+- Taib  
+- Part 2
+- My responsibility is write and execute code that illustrates data visualization techniques using ggplot2.
 
 **Example format:**
 - Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
 
-**Team Member List:**
-
-[Each team member adds their line here]
+**Team Member List:** Hope, Taib, Sara, Daniel, and Jaclyn
 
 <!-- End of Team Members section -->
 
@@ -192,8 +190,10 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 
 **Format:** 
 ```
-**[Your Name] - Part [X]:** [Your methodology description]
+**[Taib] - Part [II]:** [Reading in External Data and Visualizing with ggplot2]
 ```
+My responsibilities focused on Part II of the lab. The methodologies and visualization techniques I used include scatterplots, line plots, and bar graphs. I primarily used the ggplot2 package for most of visualizations. Patterns in the data suggest that higher-tuition private schools are more frequent (in the dataset) and tend to have higher SAT averages. Both private and public colleges tend to be clustered in the south. Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment.
+
 
 [Each team member adds their methodology here]
 
@@ -474,9 +474,13 @@ The setup chunk has already loaded all required libraries.
 
 # Role 2: Read college data from URL
 # URL: 'http://672258.youcanlearnit.net/college.csv'
+college <- read_csv('http://672258.youcanlearnit.net/college.csv')
 
 # Role 2: Explore the data
-
+head(college)
+tail(college)
+class(college)
+summary(college)
 ```
 
 ---
@@ -490,9 +494,18 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+college <- college |>
+  mutate(
+    state          = as.factor(state),
+    region         = as.factor(region),
+    highest_degree = as.factor(highest_degree),
+    control        = as.factor(control),
+    gender         = as.factor(gender),
+    loan_default_rate = as.numeric(loan_default_rate)
+  )
 
 # Role 2: Re-summarize to see the changes
-
+summary(college)
 ```
 
 ---
@@ -506,7 +519,8 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
-
+ggplot(data=college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg))
 ```
 
 ---
@@ -520,6 +534,8 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data=college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, shape=control))
 
 ```
 
@@ -534,6 +550,8 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data=college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control))
 
 ```
 
@@ -548,10 +566,12 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data = college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads))
 
 ```
 
-**Interpretation:** [Add your interpretation of this visualization here]
+**Interpretation:**  Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment. Patterns of SAT averages tend to increase as tuition fees increase in both public and private universites. 
 
 ---
 
@@ -564,6 +584,9 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data = college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads), 
+  alpha=1/2)
 
 ```
 
@@ -578,9 +601,13 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Line plot
-
+ggplot(data = college) +
+  geom_line(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads),
+  alpha=1/2)
 # Role 2: Smooth line
-
+ggplot(data = college) +
+  geom_smooth(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads),
+  alpha=1/2)
 ```
 
 ---
@@ -594,7 +621,12 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
-
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name="Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0,500))
 ```
 
 ---
@@ -608,6 +640,12 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control)) +theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name="Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0,500)) +
+  scale_fill_manual(values = c("orange","blue"))
 
 ```
 
@@ -622,12 +660,57 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add legend title and nrow=1
+ggplot(data = college) +
+  geom_bar(mapping = aes(x = region, fill = control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name = "Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0, 500)) +
+  scale_fill_manual(values = c("orange", "blue"), 
+                    guide = guide_legend(title = "Institution Type", nrow = 1)) +
+  labs(title = "Number of Schools by Region and Institution Type")
 
 # Role 2: Add label.position = "bottom"
+ggplot(data = college) +
+  geom_bar(mapping = aes(x = region, fill = control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name = "Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0, 500)) +
+  scale_fill_manual(values = c("orange", "blue"), 
+                    guide = guide_legend(title = "Institution Type", 
+                                        nrow = 1, 
+                                        label.position = "bottom")) +
+  labs(title = "Number of Schools by Region and Institution Type")
 
 # Role 2: Add keywidth = 2.5
+ggplot(data = college) +
+  geom_bar(mapping = aes(x = region, fill = control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name = "Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0, 500)) +
+  scale_fill_manual(values = c("orange", "blue"), 
+                    guide = guide_legend(title = "Institution Type", 
+                                        nrow = 1, 
+                                        label.position = "bottom",
+                                        keywidth = 2.5)) +
+  labs(title = "Number of Schools by Region and Institution Type")
 
 # Role 2: Add legend.position = "top"
+ggplot(data = college) +
+  geom_bar(mapping = aes(x = region, fill = control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name = "Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0, 500)) +
+  scale_fill_manual(values = c("orange", "blue"), 
+                    guide = guide_legend(title = "Institution Type", 
+                                        nrow = 1, 
+                                        label.position = "bottom",
+                                        keywidth = 2.5)) +
+  labs(title = "Number of Schools by Region and Institution Type") +
+  theme(legend.position = "top")
 
 ```
 
@@ -644,13 +727,53 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Add your code here
+ggplot(data = college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads), alpha=1/2) +
+  ggplot2::annotate("text", label="Elite Privates", x=45000, y=1450) +
+  geom_hline(yintercept = mean(college$sat_avg)) +
+  ggplot2::annotate("text", label="Mean SAT", x=47500, y=mean(college$sat_avg)-15) +
+  geom_vline(xintercept = mean(college$tuition)) +
+  ggplot2::annotate("text", label="Mean Tuition", y=700, x=mean(college$tuition)+7500)
 
 # Role 2: Remove panel background for cleaner look
+ggplot(data = college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads), alpha=1/2) +
+  ggplot2::annotate("text", label="Elite Privates", x=45000, y=1450) +
+  geom_hline(yintercept = mean(college$sat_avg)) +
+  ggplot2::annotate("text", label="Mean SAT", x=47500, y=mean(college$sat_avg)-15) +
+  geom_vline(xintercept = mean(college$tuition)) +
+  ggplot2::annotate("text", label="Mean Tuition", y=700, x=mean(college$tuition)+7500) +
+  theme(panel.background = element_blank(), legend.key = element_blank())
 
 # Role 2: Add scale customizations
+ggplot(data = college) +
+  geom_point(mapping=aes(x=tuition, y=sat_avg, color=control, size=undergrads), alpha=1/2) +
+  ggplot2::annotate("text", label="Elite Privates", x=45000, y=1450) +
+  geom_hline(yintercept = mean(college$sat_avg)) +
+  ggplot2::annotate("text", label="Mean SAT", x=47500, y=mean(college$sat_avg)-15) +
+  geom_vline(xintercept = mean(college$tuition)) +
+  ggplot2::annotate("text", label="Mean Tuition", y=700, x=mean(college$tuition)+7500) +
+  theme(panel.background = element_blank(), legend.key = element_blank()) +
+  scale_color_discrete(name="Institution Type") +
+  scale_size_continuous(name="Undergraduate") +
+  scale_x_continuous(name = "Tuition") +
+  scale_y_continuous(name="SAT Score")
 
 # Role 2: Change legend position to bottom and add title
-
+ggplot(data = college) +
+  geom_bar(mapping = aes(x = region, fill = control)) +
+  theme(panel.background = element_blank()) +
+  theme(plot.background = element_blank()) +
+  scale_x_discrete(name = "Region") +
+  scale_y_continuous(name = "Number of Schools", limits = c(0, 500)) +
+  scale_fill_manual(values = c("orange", "blue"), 
+                    guide = guide_legend(title = "Institution Type", 
+                                        nrow = 1, 
+                                        label.position = "bottom",
+                                        keywidth = 2.5)) +
+  theme(legend.position = "bottom") +
+  ggtitle("More colleges are in the Southern USA than any other region.",
+          subtitle = "Source: http://672258.youcanlearnit.net/college.csv")
 ```
 
 ---
@@ -664,9 +787,21 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 2: Default theme
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control))
 
 # Role 2: Try different themes (add code for each)
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control)) +
+  theme_bw()
 
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control)) +
+  theme_economist()
+
+ggplot(data = college) +
+  geom_bar(mapping = aes(x=region, fill=control)) +
+  theme_wsj()
 ```
 
 ---
