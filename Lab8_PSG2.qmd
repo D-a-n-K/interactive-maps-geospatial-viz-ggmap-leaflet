@@ -147,8 +147,8 @@ library(Rserve)
 library(ggthemes)
 library(DT)
 library(gapminder)
-library(oidnChaRts)
-library(webshot2)
+#library(oidnChaRts)
+#library(webshot2)
 
 # If you are completing the optional Part 6, ensure webshot2 is installed and configured using the commands below:
 
@@ -697,7 +697,7 @@ The setup chunk has already loaded all required libraries.
 **Instructions:** Verify Python is working by printing "Hello, Python in Quarto".
 
 ```{python}
-| label: hello-python
+#| label: hello-python
 #| echo: true
 
 # Role 3: Add your code here
@@ -710,7 +710,7 @@ print("Hello, Python in Quarto")
 **Instructions:** Import matplotlib.pyplot as plt, seaborn as sns, and pandas as pd. Then load the tips dataset and create a bar chart of average tips by day.
 
 ```{python}
-| label: import-and-tips
+#| label: import-and-tips
 #| echo: true
 
 # Role 3: Import libraries
@@ -738,7 +738,7 @@ plt.show()
 **Instructions:** Create a boxplot showing tip distribution by day using seaborn.
 
 ```{python}
-| label: seaborn-boxplot
+#| label: seaborn-boxplot
 #| echo: true
 
 # Role 3: Add your code here
@@ -757,7 +757,7 @@ plt.show()
 **Instructions:** Apply seaborn theme and custom color palette (pastel).
 
 ```{python}
-| label: customize-seaborn
+#| label: customize-seaborn
 #| echo: true
 
 # Role 3: Add your code here
@@ -777,7 +777,7 @@ plt.show()
 **Instructions:** Import NLTK, load inaugural corpus, explore Obama's 2009 speech, tokenize, clean (remove punctuation and stopwords), and preview.
 
 ```{python}
-| label: text-data-prep
+#| label: text-data-prep
 #| echo: true
 
 # Role 3: Import NLTK and download data
@@ -807,7 +807,7 @@ print(words[:20])
 **Instructions:** Calculate word frequencies, get top 10 most common words, convert to DataFrame, and create bar chart.
 
 ```{python}
-| label: text-visualization
+#| label: text-visualization
 #| echo: true
 
 # Role 3: Calculate word frequency
@@ -854,12 +854,12 @@ plt.show()
 **Instructions:** Install shiny and shinydashboard packages (code is commented out - only run once).
 
 ```{r}
-| label: install-shiny
+#| label: install-shiny
 #| echo: true
 
 # Role 4: Uncomment and run once to install
-install.packages("shiny")
-install.packages("shinydashboard")
+#install.packages("shiny")
+#install.packages("shinydashboard")
 
 ```
 
@@ -877,7 +877,7 @@ install.packages("shinydashboard")
 #| echo: true
 
 # Role 4: Run these in your console (one at a time)
-library(shiny)
+#library(shiny)
 #runExample("01_hello")
 #runExample("02_text")
 #runExample("03_reactivity")
