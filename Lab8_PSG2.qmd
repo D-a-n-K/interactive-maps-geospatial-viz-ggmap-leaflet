@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel, and Jaclyn"
+author: "Team Name: Hope Tatenda Mutema | Team Members: Taib"
 date: today
 format: 
   pdf:
@@ -21,7 +21,7 @@ editor: source
 
 # Lab Overview
 
-## Learning Objectives
+## Learning Objectives`
 
 ### Technical Learning Objectives
 1. Understand the "Grammar of Graphics" in ggplot2
