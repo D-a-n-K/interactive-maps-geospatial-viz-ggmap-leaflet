@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # Define UI
 app_ui = ui.page_fluid(
-    ui.panel_title("Old Faithful Geyser Data"),
+    ui.panel_title("PyShiny"),
     ui.layout_sidebar(
         ui.panel_sidebar(
             ui.input_slider("bins", "Number of bins:", min=1, max=50, value=30)
