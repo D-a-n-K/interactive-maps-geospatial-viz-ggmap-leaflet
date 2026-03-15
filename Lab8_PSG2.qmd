@@ -858,8 +858,8 @@ plt.show()
 #| echo: true
 
 # Role 4: Uncomment and run once to install
-# install.packages("shiny")
-# install.packages("shinydashboard")
+install.packages("shiny")
+install.packages("shinydashboard")
 
 ```
 
@@ -878,17 +878,17 @@ plt.show()
 
 # Role 4: Run these in your console (one at a time)
 library(shiny)
-# runExample("01_hello")
-# runExample("02_text")
-# runExample("03_reactivity")
-# runExample("04_mpg")
-# runExample("05_sliders")
-# runExample("06_tabsets")
-# runExample("07_widgets")
-# runExample("08_html")
-# runExample("09_upload")
-# runExample("10_download")
-# runExample("11_timer")
+#runExample("01_hello")
+#runExample("02_text")
+#runExample("03_reactivity")
+#runExample("04_mpg")
+#runExample("05_sliders")
+#runExample("06_tabsets")
+#runExample("07_widgets")
+#runExample("08_html")
+#runExample("09_upload")
+#runExample("10_download")
+#runExample("11_timer")
 
 ```
 
@@ -912,7 +912,7 @@ library(shiny)
 
 **What I created:** [Describe your app]
 
-**Customizations made:** [List changes from template]
+**Customizations made:** [Changes the title to "Sara's Shiny App"
 
 **How to run:** Run `shiny::runApp("app.R")` in R console
 
