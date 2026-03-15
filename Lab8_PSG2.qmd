@@ -196,6 +196,7 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 ```
 
 **Sara Huta - Part 3:** Used matplotlib, seaborn and pandas to create visualize the tips dataset in a bar chart, and two boxplots. Visualized the Obama 2009 Inguaral speech in a bar chart and cleaned&tokenized the text data.
+
 **Sara Huta - Part 4&5:** Build dashboards with Shiny in R, PyShiny with Python, and Streamlit with Python from the already provided code structures. 
 
 <!-- End of Methods Overview -->
