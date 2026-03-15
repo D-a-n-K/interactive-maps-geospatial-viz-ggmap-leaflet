@@ -872,7 +872,7 @@ install.packages("shinydashboard")
 **Note:** These run interactively in your console - not in the rendered document.
 
 ```{r}
-| label: shiny-examples
+#| label: shiny-examples
 #| eval: false
 #| echo: true
 
@@ -889,7 +889,6 @@ library(shiny)
 #runExample("09_upload")
 #runExample("10_download")
 #runExample("11_timer")
-
 ```
 
 ---
@@ -944,6 +943,8 @@ library(shiny)
 **Customizations made:** Changed title to "PyShiny"
 
 **How to run:** Run `shiny run --reload app.py --port 8501` in terminal
+
+http://localhost:8000
 
 **Comparison to RShiny:** [Note similarities/differences]
 ```

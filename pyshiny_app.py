@@ -5,15 +5,14 @@ import matplotlib.pyplot as plt
 # Define UI
 app_ui = ui.page_fluid(
     ui.panel_title("PyShiny"),
-    ui.layout_sidebar(
-        ui.panel_sidebar(
+        ui.page_sidebar(
+    ui.sidebar(
             ui.input_slider("bins", "Number of bins:", min=1, max=50, value=30)
         ),
-        ui.panel_main(
             ui.output_plot("distPlot")
         )
     )
-)
+
 
 # Define server logic
 def server(input, output, session):
