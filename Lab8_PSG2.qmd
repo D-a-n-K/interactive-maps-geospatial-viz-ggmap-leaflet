@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: Hope Tatenda Mutema | Team Members: Taib"
+author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel, and Jaclyn""
 date: today
 format: 
   pdf:
@@ -15,7 +15,7 @@ execute:
   echo: true
   warning: false
   message: false
-  python: "/opt/anaconda3/envs/TextMiningLLM/bin/python"
+  python: "/opt/anaconda3/envs/textmining/bin/python"
 editor: source
 ---
 
@@ -55,16 +55,16 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 <!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
 
 **Instructions:** Each team member should add a bullet point below with:
-- Your full name
-- Your assigned role (Part 1, 2, 3, or 4)
-- A brief description of your responsibility
+- Sara Huta
+- Part 3, 4, 5
+- Data visualization in Python, building dashboards in R with Shiny, building dashboards in Python with Streamlit
 
 **Example format:**
 - Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
 
 **Team Member List:**
 
-[Each team member adds their line here]
+Hope, Taib, Sara, Daniel, Jaclyn
 
 <!-- End of Team Members section -->
 
@@ -113,10 +113,10 @@ The belt and suspenders approach to ensure I am using the correct Python environ
 library(reticulate)
 
 # Set Python path BEFORE loading spacyr - this is critical!
-Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
-Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
+Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
 
-use_condaenv("TextMiningLLM", required = TRUE)
+use_condaenv("textmining", required = TRUE)
 ```
 
 
@@ -701,9 +701,8 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 3: Add your code here
-
+print("Hello, Python in Quarto")
 ```
-
 ---
 
 ## Deliverable 31: Import Python Libraries and Prepare Data
@@ -715,13 +714,21 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 3: Import libraries
-
+import matplotlib.pyplot as plt
+import seaborn as sns 
+import pandas as pd
 # Role 3: Load tips dataset
-
+tips = sns.load_dataset('tips')
+print(tips.head())
 # Role 3: Calculate average tips by day
-
+avg_tips = tips.groupby('day')['tip'].mean().reset_index()
 # Role 3: Create bar chart
-
+plt.figure(figsize=(8, 6))
+plt.bar(avg_tips["day"], avg_tips["tip"], color="skyblue")
+plt.xlabel("Day of the Week")
+plt.ylabel("Average Tip")
+plt.title("Average Tip Amount by Day")
+plt.show()
 ```
 
 ---
@@ -735,7 +742,12 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 3: Add your code here
-
+plt.figure(figsize=(8, 6))
+sns.boxplot(x='day', y='tip', data=tips)
+plt.xlabel('Day of the Week')
+plt.ylabel('Tip Amount')
+plt.title('Distribution of Tips by Day')
+plt.show()
 ```
 
 ---
@@ -749,7 +761,13 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 3: Add your code here
-
+sns.set_theme(style="whitegrid")
+plt.figure(figsize=(8, 6))
+sns.boxplot(x='day', y='tip', data=tips, palette='pastel')
+plt.xlabel('Day of the Week')
+plt.ylabel('Tip Amount')
+plt.title('Costumized Distribution of Tips by Day')
+plt.show()
 ```
 
 ---
@@ -763,11 +781,23 @@ The setup chunk has already loaded all required libraries.
 #| echo: true
 
 # Role 3: Import NLTK and download data
-
+import nltk
+from nltk.corpus import inaugural
+nltk.download('inaugural')
+nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
+import pandas as pd 
 # Role 3: Load and explore Obama's speech
-
+obama_speech = inaugural.raw('2009-Obama.txt')
+print(obama_speech[:500])
 # Role 3: Tokenize and clean
-
+tokens = word_tokenize(obama_speech.lower())
+words = [word for word in tokens if word.isalpha()]
+stop_words = set(stopwords.words('english'))
+words = [word for word in words if not word in stop_words]
+print(words[:20])
 ```
 
 ---
