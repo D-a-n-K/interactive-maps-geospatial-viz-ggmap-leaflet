@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: Hope Tatenda Mutema | Team Members: Taib"
+author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel, and Jaclyn"
 date: today
 format: 
   pdf:
