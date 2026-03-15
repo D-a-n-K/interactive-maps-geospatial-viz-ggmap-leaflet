@@ -911,7 +911,9 @@ library(shiny)
 
 **What I created:** [Describe your app]
 
-**Customizations made:** Changed the title to "Sara's Shiny App"
+**Customizations made:** 
+- Changed the title to "Sara's Shiny App"
+- Tested the interctive slider function 
 
 **How to run:** Run `shiny::runApp("app.R")` in R console
 
@@ -940,7 +942,10 @@ library(shiny)
 
 **What I created:** [Describe your app]
 
-**Customizations made:** Changed title to "PyShiny"
+**Customizations made:** 
+- Changed title to "PyShiny"
+- Tested the ineractive slider function and graph
+- Updated the script for the app to run on web browser 
 
 **How to run:** Run `shiny run --reload app.py --port 8501` in terminal
 

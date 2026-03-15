@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # Define UI
 app_ui = ui.page_fluid(
-    ui.panel_title("PyShiny"),
+    ui.panel_title("Sara's PyShiny App"),
         ui.page_sidebar(
     ui.sidebar(
             ui.input_slider("bins", "Number of bins:", min=1, max=50, value=30)

@@ -17,7 +17,7 @@ name = st.text_input('Enter your name', 'World')
 st.write(f'Hello, {name}!')
 
 # Display a simple chart
-st.subheader('Random Data Chart')
+st.subheader('Data Chart')
 chart_data = pd.DataFrame(
     np.random.randn(20, 3),
     columns=['A', 'B', 'C']
@@ -25,7 +25,7 @@ chart_data = pd.DataFrame(
 st.line_chart(chart_data)
 
 # Display a dataframe
-st.subheader('Sample DataFrame')
+st.subheader('Data Frame')
 df = pd.DataFrame({
     'Column 1': [1, 2, 3, 4],
     'Column 2': [10, 20, 30, 40]
