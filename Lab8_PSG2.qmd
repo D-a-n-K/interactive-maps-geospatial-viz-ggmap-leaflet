@@ -811,13 +811,19 @@ print(words[:20])
 #| echo: true
 
 # Role 3: Calculate word frequency
-
+word_freq = nltk.FreqDist(words)
 # Role 3: Get top 10 words
-
+most_common_words = word_freq.most_common(10)
 # Role 3: Create DataFrame
-
+df = pd.DataFrame(most_common_words, columns=['Word', 'Frequency'])
 # Role 3: Plot
-
+plt.figure(figsize=(10, 6))
+plt.bar(df['Word'], df['Frequency'], color='skyblue')
+plt.xlabel('Words')
+plt.ylabel('Frequency')
+plt.title('Top 10 Most Frequent Words in Obama\'s 2009 Inaugural Address')
+plt.xticks(rotation=45)
+plt.show()
 ```
 
 ---
