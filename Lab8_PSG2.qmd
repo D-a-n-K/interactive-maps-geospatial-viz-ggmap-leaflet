@@ -951,7 +951,9 @@ library(shiny)
 
 http://localhost:8000
 
-**Comparison to RShiny:** [Note similarities/differences]
+**Comparison to RShiny:**
+Virtually the same set up and visualization result, only thing is RShiny was immedialty visible on the IDE, while PyShiny took some time to configure and I could only see it from an external website on a web browser. Both very helpful in visualizing data and easy to apply edits to. Lots of formats to choose from for different data outputs. 
+ 
 ```
 
 [Add your documentation here]
@@ -980,9 +982,11 @@ http://localhost:8000
 
 **How to run:** Run `streamlit run streamlit_app.py --server.port 8502` in terminal
 
-**Comparison to Shiny/PyShiny:** [Note key differences]
+**Comparison to Shiny/PyShiny:** 
+The streamilit app was more interesting to play with, althought the RShiny app has more options in how to configure the data. Both were easy to work with and apply edits to.
 
-**Which do you prefer and why?** [Your opinion]
+**Which do you prefer and why?** 
+I prefer the streamlit app, it has more interaction and has a cleaner look. 
 ```
 
 [Add your documentation here]
