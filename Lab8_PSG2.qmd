@@ -15,13 +15,13 @@ execute:
   echo: true
   warning: false
   message: false
-  python: "/opt/anaconda3/envs/TextMiningLLM/bin/python"
+  python: "/opt/anaconda3/envs/textmining/bin/python"
 editor: source
 ---
 
 # Lab Overview
 
-## Learning Objectives
+## Learning Objectives`
 
 ### Technical Learning Objectives
 1. Understand the "Grammar of Graphics" in ggplot2
@@ -55,6 +55,12 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 <!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
 
 **Instructions:** Each team member should add a bullet point below with:
+- Sara Huta
+- Part 3, 4, 5
+- Data visualization in Python, building dashboards in R with Shiny, building dashboards in Python with Streamlit
+
+**Example format:**
+- Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
 - Taib  
 - Part 2
 - My responsibility is write and execute code that illustrates data visualization techniques using ggplot2.
@@ -112,10 +118,10 @@ The belt and suspenders approach to ensure I am using the correct Python environ
 library(reticulate)
 
 # Set Python path BEFORE loading spacyr - this is critical!
-Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
-Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
+Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
 
-use_condaenv("TextMiningLLM", required = TRUE)
+use_condaenv("textmining", required = TRUE)
 ```
 
 
@@ -146,8 +152,8 @@ library(Rserve)
 library(ggthemes)
 library(DT)
 library(gapminder)
-library(oidnChaRts)
-library(webshot2)
+#library(oidnChaRts)
+#library(webshot2)
 
 # If you are completing the optional Part 6, ensure webshot2 is installed and configured using the commands below:
 
@@ -197,7 +203,9 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 My responsibilities focused on Part II of the lab. The methodologies and visualization techniques I used include scatterplots, line plots, and bar graphs. I primarily used the ggplot2 package for most of visualizations. Patterns in the data suggest that higher-tuition private schools are more frequent (in the dataset) and tend to have higher SAT averages. Both private and public colleges tend to be clustered in the south. Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment.
 
 
-[Each team member adds their methodology here]
+**Sara Huta - Part 3:** Used matplotlib, seaborn and pandas to create visualize the tips dataset in a bar chart, and two boxplots. Visualized the Obama 2009 Inguaral speech in a bar chart and cleaned&tokenized the text data.
+
+**Sara Huta - Part 4&5:** Build dashboards with Shiny in R, PyShiny with Python, and Streamlit with Python from the already provided code structures. 
 
 <!-- End of Methods Overview -->
 
@@ -898,7 +906,7 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Add your code here
-
+print("Hello, Python in Quarto")
 ```
 
 ***
@@ -912,13 +920,21 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Import libraries
-
+import matplotlib.pyplot as plt
+import seaborn as sns 
+import pandas as pd
 # Role 3: Load tips dataset
-
+tips = sns.load_dataset('tips')
+print(tips.head())
 # Role 3: Calculate average tips by day
-
+avg_tips = tips.groupby('day')['tip'].mean().reset_index()
 # Role 3: Create bar chart
-
+plt.figure(figsize=(8, 6))
+plt.bar(avg_tips["day"], avg_tips["tip"], color="skyblue")
+plt.xlabel("Day of the Week")
+plt.ylabel("Average Tip")
+plt.title("Average Tip Amount by Day")
+plt.show()
 ```
 
 ***
@@ -932,7 +948,12 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Add your code here
-
+plt.figure(figsize=(8, 6))
+sns.boxplot(x='day', y='tip', data=tips)
+plt.xlabel('Day of the Week')
+plt.ylabel('Tip Amount')
+plt.title('Distribution of Tips by Day')
+plt.show()
 ```
 
 ***
@@ -946,7 +967,13 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Add your code here
-
+sns.set_theme(style="whitegrid")
+plt.figure(figsize=(8, 6))
+sns.boxplot(x='day', y='tip', data=tips, palette='pastel')
+plt.xlabel('Day of the Week')
+plt.ylabel('Tip Amount')
+plt.title('Costumized Distribution of Tips by Day')
+plt.show()
 ```
 
 ***
@@ -960,11 +987,23 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Import NLTK and download data
-
+import nltk
+from nltk.corpus import inaugural
+nltk.download('inaugural')
+nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
+import pandas as pd 
 # Role 3: Load and explore Obama's speech
-
+obama_speech = inaugural.raw('2009-Obama.txt')
+print(obama_speech[:500])
 # Role 3: Tokenize and clean
-
+tokens = word_tokenize(obama_speech.lower())
+words = [word for word in tokens if word.isalpha()]
+stop_words = set(stopwords.words('english'))
+words = [word for word in words if not word in stop_words]
+print(words[:20])
 ```
 
 ***
@@ -978,13 +1017,19 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 3: Calculate word frequency
-
+word_freq = nltk.FreqDist(words)
 # Role 3: Get top 10 words
-
+most_common_words = word_freq.most_common(10)
 # Role 3: Create DataFrame
-
+df = pd.DataFrame(most_common_words, columns=['Word', 'Frequency'])
 # Role 3: Plot
-
+plt.figure(figsize=(10, 6))
+plt.bar(df['Word'], df['Frequency'], color='skyblue')
+plt.xlabel('Words')
+plt.ylabel('Frequency')
+plt.title('Top 10 Most Frequent Words in Obama\'s 2009 Inaugural Address')
+plt.xticks(rotation=45)
+plt.show()
 ```
 
 ***
@@ -1019,8 +1064,8 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 4: Uncomment and run once to install
-# install.packages("shiny")
-# install.packages("shinydashboard")
+#install.packages("shiny")
+#install.packages("shinydashboard")
 
 ```
 
@@ -1038,19 +1083,18 @@ ggplot(data = college) +
 #| echo: true
 
 # Role 4: Run these in your console (one at a time)
-library(shiny)
-# runExample("01_hello")
-# runExample("02_text")
-# runExample("03_reactivity")
-# runExample("04_mpg")
-# runExample("05_sliders")
-# runExample("06_tabsets")
-# runExample("07_widgets")
-# runExample("08_html")
-# runExample("09_upload")
-# runExample("10_download")
-# runExample("11_timer")
-
+#library(shiny)
+#runExample("01_hello")
+#runExample("02_text")
+#runExample("03_reactivity")
+#runExample("04_mpg")
+#runExample("05_sliders")
+#runExample("06_tabsets")
+#runExample("07_widgets")
+#runExample("08_html")
+#runExample("09_upload")
+#runExample("10_download")
+#runExample("11_timer")
 ```
 
 ***
@@ -1073,7 +1117,9 @@ library(shiny)
 
 **What I created:** [Describe your app]
 
-**Customizations made:** [List changes from template]
+**Customizations made:** 
+- Changed the title to "Sara's Shiny App"
+- Tested the interctive slider function 
 
 **How to run:** Run `shiny::runApp("app.R")` in R console
 
@@ -1102,11 +1148,18 @@ library(shiny)
 
 **What I created:** [Describe your app]
 
-**Customizations made:** [List changes from template]
+**Customizations made:** 
+- Changed title to "PyShiny"
+- Tested the ineractive slider function and graph
+- Updated the script for the app to run on web browser 
 
 **How to run:** Run `shiny run --reload app.py --port 8501` in terminal
 
-**Comparison to RShiny:** [Note similarities/differences]
+http://localhost:8000
+
+**Comparison to RShiny:**
+Virtually the same set up and visualization result, only thing is RShiny was immedialty visible on the IDE, while PyShiny took some time to configure and I could only see it from an external website on a web browser. Both very helpful in visualizing data and easy to apply edits to. Lots of formats to choose from for different data outputs. 
+ 
 ```
 
 [Add your documentation here]
@@ -1135,9 +1188,11 @@ library(shiny)
 
 **How to run:** Run `streamlit run streamlit_app.py --server.port 8502` in terminal
 
-**Comparison to Shiny/PyShiny:** [Note key differences]
+**Comparison to Shiny/PyShiny:** 
+The streamilit app was more interesting to play with, althought the RShiny app has more options in how to configure the data. Both were easy to work with and apply edits to.
 
-**Which do you prefer and why?** [Your opinion]
+**Which do you prefer and why?** 
+I prefer the streamlit app, it has more interaction and has a cleaner look. 
 ```
 
 [Add your documentation here]
