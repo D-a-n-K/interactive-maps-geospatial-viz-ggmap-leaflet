@@ -36,7 +36,7 @@ editor: source
 3. Understand the power of interactive dashboards for business communication
 4. Practice collaborative development workflows used in professional settings
 
----
+***
 
 ## Lab Description
 
@@ -47,7 +47,7 @@ This lab combines two major learning objectives:
 
 You will work in **teams of 3-4 students** based on your assigned Peer Support Groups. Remember, these Peer Support Groups are available within Canvas, along with communication tools for the group. Each team member will be responsible for one major part of the lab, working on their own Git branch, and then integrating everyone's work through Pull Requests. If you are unsure about your Peer Support Group assignment, please contact the instructor or teaching assistant. Also, if your team only has 3 members, you should decide as a group how to divide the work for the four parts.
 
----
+***
 
 ## Team Members & Roles
 
@@ -58,15 +58,16 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 - Taib  
 - Part 2
 - My responsibility is write and execute code that illustrates data visualization techniques using ggplot2.
+- **Hope Tatenda Mutema**
+- Part 1: ggplot2 Fundamentals, Part 2: Advanced ggplot2 & External Data
+- I will focus on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
 
-**Example format:**
-- Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
 
 **Team Member List:** Hope, Taib, Sara, Daniel, and Jaclyn
 
 <!-- End of Team Members section -->
 
----
+***
 
 ## Collaborative Workflow Overview
 
@@ -83,7 +84,7 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 
 **Timeline**: You have **two weeks** to complete this lab.
 
----
+***
 
 ## Lab Structure
 
@@ -100,7 +101,7 @@ This lab has **five required parts** and **two optional parts**:
 - **Part 7:** Google Maps API Visualization
 
 I encourage you to work on the optional parts individually after completing the required sections, as they are not part of the team submission. Both of these optional parts contain valuable visualization techniques that will enhance your skills.
----
+***
 
 # Reticulate setup
 
@@ -165,7 +166,7 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 }
 ```
 
----
+***
 
 # Introduction
 
@@ -176,7 +177,7 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 
 [Team will add introduction here]
 
----
+***
 
 # Methods Overview
 
@@ -191,6 +192,7 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 **Format:** 
 ```
 **[Taib] - Part [II]:** [Reading in External Data and Visualizing with ggplot2]
+**Hope Tatenda Mutema - Part 1:** I focused on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
 ```
 My responsibilities focused on Part II of the lab. The methodologies and visualization techniques I used include scatterplots, line plots, and bar graphs. I primarily used the ggplot2 package for most of visualizations. Patterns in the data suggest that higher-tuition private schools are more frequent (in the dataset) and tend to have higher SAT averages. Both private and public colleges tend to be clustered in the south. Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment.
 
@@ -199,17 +201,39 @@ My responsibilities focused on Part II of the lab. The methodologies and visuali
 
 <!-- End of Methods Overview -->
 
----
+***
 
 # Part 1: Data Visualization Using ggplot2
 
-**👤 Assigned to: Role 1 - ggplot2 Fundamentals**
+**👤 Assigned to Hope Tatenda Mutema: Role 1 - ggplot2 Fundamentals**
 
 **Deliverables: 1-16**
 
 **Focus:** Understanding the Grammar of Graphics, exploring basic ggplot2 functionality with the diamonds dataset
 
----
+***
+## Loading Necessary Libraries
+
+Loading necessary libraries for the first part of the lab. Note that some of these libraries will be used in later parts, but we are loading them all here for convenience for example, geojsonio, ggmap,highcharter, leaflet, plotly, Rserve, sf, ggthemes,DT, gapminder, devtools and remotes.
+
+```{r}
+#| label: load-libraries
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(DT)
+library(gapminder)
+library(devtools)
+library(remotes)
+library(highcharter)
+library(plotly)
+library(leaflet)
+library(sf)
+library(geojsonio)
+library(Rserve)
+library(ggmap)
+library(oidnChaRts)
+```
 
 ## Deliverable 1: Get Working Directory
 
@@ -218,57 +242,89 @@ My responsibilities focused on Part II of the lab. The methodologies and visuali
 ```{r}
 #| label: working-directory
 #| echo: true
-
-# Role 1: Add your code here
-
+getwd()
 ```
 
----
+***
 
 ## Deliverable 2: Not assigned (setup already complete above)
 
 The setup chunk has already loaded all required libraries.
 
----
+***
+
+## Google API setup 
+
+```{r}
+#| label: google-api-setup
+# Set and register Google API key
+Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
+ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
+
+# Use the correct conda environment
+reticulate::use_condaenv("TextMiningLLM", required = TRUE)
+
+# Verify Python configuration (optional)
+# reticulate::py_config()
+
+# Ensure PhantomJS is installed for webshot rendering
+if (!webshot::is_phantomjs_installed()) {
+  webshot::install_phantomjs()
+}
+```
+
+## Test if the Google API key is working 
+
+```{r}
+#| label: test-google-api
+print(Sys.getenv("GOOGLE_API_KEY"))
+ggmap::has_google_key()
+reticulate::py_config()
+webshot::is_phantomjs_installed()
+```
 
 ## Deliverable 3: Get and Explore the Diamonds Dataset
+
+Beginning our ggplot2 exploration with the built-in diamonds dataset.
 
 **Instructions:** Load the diamonds dataset using `data()`, then explore it using `head()` and `tail()`.
 
 ```{r}
 #| label: explore-diamonds
 #| echo: true
-
-# Role 1: Add your code here
-
+data(diamonds)
+head(diamonds)
+tail(diamonds)
 ```
 
----
+***
 
 ## Deliverable 4: Create a Histogram in Base R
 
+First, looking at building basic visualizations using Base R before we dive into ggplot2. 
+
 **Instructions:** Use `hist()` to create a histogram of diamond carats. Include a main title "Carat Histogram" and x-axis label "Carat".
+
+We will be using the hist() function from base R, the histogram main label will be "Carat Histogram" and the x-axis label will be "Carat".
 
 ```{r}
 #| label: baseR-histogram
 #| echo: true
-
-# Role 1: Add your code here
-
+hist(diamonds$carat, main = "Carat Histogram", xlab = "Carat")
 ```
 
----
+***
 
 ## Deliverable 5: Create a Scatterplot in Base R
+
+Creating a Scatterplot of "diamonds" using base R. 
 
 **Instructions:** Create a scatterplot of price vs carat using Base R's `plot()` function.
 
 ```{r}
 #| label: baseR-scatterplot
 #| echo: true
-
-# Role 1: Add your code here
-
+plot(price ~ carat, data = diamonds)
 ```
 
 **Bonus:** Try the alternative approach without the formula interface.
@@ -276,68 +332,68 @@ The setup chunk has already loaded all required libraries.
 ```{r}
 #| label: alternative-baseR-scatterplot
 #| echo: true
-
-# Role 1: Add your code here (alternative approach)
-
+plot(diamonds$carat, diamonds$price, xlab = "Carat", ylab = "Price", main = "Price vs Carat")
 ```
 
----
+***
 
 ## Deliverable 6: Build a Boxplot in Base R
 
-**Instructions:** Create a boxplot of diamond carats using `boxplot()`.
+**Instructions:** Create a boxplot of diamond carats using `boxplot()`. 
 
 ```{r}
 #| label: baseR-boxplot
 #| echo: true
-
-# Role 1: Add your code here
-
+boxplot(diamonds$carat)
 ```
 
----
+***
 
 ## Deliverable 7: Create a Blank ggplot Canvas
 
 **Instructions:** Call `ggplot()` with no arguments to see an empty canvas.
 
+This gives a blank canvas on which to plot our data visualizations. 
+
 ```{r}
 #| label: blank-canvas
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot()
 ```
 
----
+***
 
 ## Deliverable 8: Rebuild the Histogram with ggplot2
 
+Now adding data and some intructions to out ggplot(). 
+
 **Instructions:** Create a histogram using `ggplot()` + `geom_histogram()`, mapping carat to x.
+
+Rebuilding the diamonds histogram with ggplot2, first calling ggplot() function with data argument set to diamonds then adding the geom_hstogram()
 
 ```{r}
 #| label: ggplot-histogram
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot(data = diamonds) +
+geom_histogram(aes(x = carat))
 ```
 
----
+***
 
 ## Deliverable 9: Build a Density Plot
+
+Now building a density plot, after the + sign we will add geom_density() function with the fill argument set to "grey50" to give the density plot a grey color.
 
 **Instructions:** Create a density plot using `geom_density()` with `fill = "grey50"`.
 
 ```{r}
 #| label: ggplot-density
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot(data = diamonds) +
+geom_density(aes(x = carat), fill = "grey50")
 ```
 
----
+***
 
 ## Deliverable 10: Build a Scatterplot with ggplot
 
@@ -346,12 +402,11 @@ The setup chunk has already loaded all required libraries.
 ```{r}
 #| label: ggplot-scatterplot
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot(diamonds, aes(x = carat, y = price)) +
+geom_point()
 ```
 
----
+***
 
 ## Deliverable 11: Create ggplot Object and Add Color
 
@@ -360,88 +415,95 @@ The setup chunk has already loaded all required libraries.
 ```{r}
 #| label: ggplot-object-color
 #| echo: true
-
 # Role 1: Create the 'g' object
-
+g <- ggplot(diamonds, aes(x = carat, y = price))
 # Role 1: Recreate the plot with the 'g' object
-
+g + geom_point() + geom_smooth(method = "lm", se = FALSE) #trying some other geom functions
 # Role 1: Add color aesthetic
-
+g + geom_point(aes(color = color))
 ```
 
----
+***
 
 ## Deliverable 12: Demonstrate Facet Wrap
+
+This will create multiple plots based on a varibale in the dataset or sub-grouping the data. 
 
 **Instructions:** Create a faceted scatterplot using `facet_wrap()`, faceting by the 'color' variable.
 
 ```{r}
 #| label: facet-wrap
 #| echo: true
-
-# Role 1: Add your code here
-
+g + geom_point(aes(color = color)) +
+facet_wrap(~ color)
 ```
 
----
+***
 
 ## Deliverable 13: Demonstrate Facet Grid
 
 **Instructions:** Create a facet grid using `facet_grid()` with cut on rows and color on columns.
 
+This assigns all levels of a variable to either a row or column.
+
 ```{r}
 #| label: facet-grid
 #| echo: true
-
-# Role 1: Add your code here
-
+g + geom_point(aes(color = color)) +
+facet_grid(cut ~ color)
 ```
 
----
+***
 
 ## Deliverable 14: Facet Wrap with Histogram
+
+Also including a histogram in a facet wrap plot. After structuring the data as above we call the geom_histogram() function and then add the facet_wrap() function with ~ color in the argument. 
 
 **Instructions:** Create faceted histograms of carat, faceting by color.
 
 ```{r}
 #| label: facet-histogram
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot(diamonds, aes(x = carat)) +
+geom_histogram() +
+facet_wrap(~ color)
 ```
 
----
+***
 
 ## Deliverable 15: Demonstrate Boxplots
+
+Using the same approach to demonstrate the boxplot. Calling the ggplot() function as before. 
 
 **Instructions:** Create boxplots showing carat distribution by cut.
 
 ```{r}
 #| label: ggplot-boxplot
 #| echo: true
-
 # Role 1: Add your code here for y = carat, x = 1
-
+ggplot(diamonds, aes(y = carat, x = 1)) +
+geom_boxplot()
 # Role 1: Add your code here for y = carat, x = cut
-
+ggplot(diamonds, aes(y = carat, x = cut)) +
+geom_boxplot()
 ```
 
----
+***
 
 ## Deliverable 16: Demonstrate Violin Plots
+
+Violins are similar to boxplots, but curved and gives a sense of the density of the data.
 
 **Instructions:** Create violin plots showing carat distribution by cut.
 
 ```{r}
 #| label: violin-plot
 #| echo: true
-
-# Role 1: Add your code here
-
+ggplot(diamonds, aes(y = carat, x = cut)) +
+geom_violin()
 ```
 
----
+***
 
 **Role 1 Complete!** 
 
@@ -452,7 +514,7 @@ The setup chunk has already loaded all required libraries.
 4. Push your branch to GitHub
 5. Open a Pull Request
 
----
+***
 
 # Part 2: Advanced ggplot2 & External Data Visualization
 
@@ -462,7 +524,7 @@ The setup chunk has already loaded all required libraries.
 
 **Focus:** Working with external data, advanced customization, themes, annotations
 
----
+***
 
 ## Deliverable 17: Read and Explore College Dataset
 
@@ -483,7 +545,7 @@ class(college)
 summary(college)
 ```
 
----
+***
 
 ## Deliverable 18: Wrangle the College Data
 
@@ -508,7 +570,7 @@ college <- college |>
 summary(college)
 ```
 
----
+***
 
 ## Deliverable 19: Create Basic Scatterplot
 
@@ -523,7 +585,7 @@ ggplot(data=college) +
   geom_point(mapping=aes(x=tuition, y=sat_avg))
 ```
 
----
+***
 
 ## Deliverable 20: Add Shape Control
 
@@ -539,7 +601,7 @@ ggplot(data=college) +
 
 ```
 
----
+***
 
 ## Deliverable 21: Add Color Control
 
@@ -555,7 +617,7 @@ ggplot(data=college) +
 
 ```
 
----
+***
 
 ## Deliverable 22: Add Size Aesthetic and Interpret
 
@@ -573,7 +635,7 @@ ggplot(data = college) +
 
 **Interpretation:**  Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment. Patterns of SAT averages tend to increase as tuition fees increase in both public and private universites. 
 
----
+***
 
 ## Deliverable 23: Add Alpha (Opacity)
 
@@ -590,7 +652,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 24: Add Line Plot and Smooth
 
@@ -610,7 +672,7 @@ ggplot(data = college) +
   alpha=1/2)
 ```
 
----
+***
 
 ## Deliverable 25: Create Bar Graph
 
@@ -629,7 +691,7 @@ ggplot(data = college) +
   scale_y_continuous(name = "Number of Schools", limits = c(0,500))
 ```
 
----
+***
 
 ## Deliverable 26: Change Bar Colors
 
@@ -649,7 +711,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 27: Customize Legends
 
@@ -714,7 +776,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 28: Add Annotations
 
@@ -776,7 +838,7 @@ ggplot(data = college) +
           subtitle = "Source: http://672258.youcanlearnit.net/college.csv")
 ```
 
----
+***
 
 ## Deliverable 29: Explore Themes
 
@@ -804,7 +866,7 @@ ggplot(data = college) +
   theme_wsj()
 ```
 
----
+***
 
 **Role 2 Complete!** 
 
@@ -815,7 +877,7 @@ ggplot(data = college) +
 4. Push your branch to GitHub
 5. Open a Pull Request
 
----
+***
 
 # Part 3: Data Visualization in Python
 
@@ -825,7 +887,7 @@ ggplot(data = college) +
 
 **🎯 Focus:** Python visualization with matplotlib, seaborn, and NLTK text analysis
 
----
+***
 
 ## Deliverable 30: Prepare Python Environment
 
@@ -839,7 +901,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 31: Import Python Libraries and Prepare Data
 
@@ -859,7 +921,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 32: Create Seaborn Boxplot
 
@@ -873,7 +935,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 33: Customize Plot with Theme
 
@@ -887,7 +949,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 34: Prepare Text Data for Visualization
 
@@ -905,7 +967,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 35: Visualize Text Data
 
@@ -925,7 +987,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 **Role 3 Complete!** 
 
@@ -936,7 +998,7 @@ ggplot(data = college) +
 4. Push your branch to GitHub
 5. Open a Pull Request
 
----
+***
 
 # Part 4 & 5: Building Dashboards with Shiny and Streamlit
 
@@ -946,7 +1008,7 @@ ggplot(data = college) +
 
 **🎯 Focus:** Creating interactive dashboards in R (Shiny) and Python (Streamlit)
 
----
+***
 
 ## Deliverable 36: Install Shiny Packages
 
@@ -962,7 +1024,7 @@ ggplot(data = college) +
 
 ```
 
----
+***
 
 ## Deliverable 37: Explore Shiny Examples
 
@@ -991,7 +1053,7 @@ library(shiny)
 
 ```
 
----
+***
 
 ## Deliverable 38: Create RShiny App
 
@@ -1020,7 +1082,7 @@ library(shiny)
 
 [Add your documentation here]
 
----
+***
 
 ## Deliverable 39: Create PyShiny App
 
@@ -1049,7 +1111,7 @@ library(shiny)
 
 [Add your documentation here]
 
----
+***
 
 ## Deliverable 40: Create Streamlit App
 
@@ -1080,7 +1142,7 @@ library(shiny)
 
 [Add your documentation here]
 
----
+***
 
 **Role 4 Complete!** 
 
@@ -1093,7 +1155,7 @@ library(shiny)
 6. Open a Pull Request
 7. Include app files in final submission
 
----
+***
 
 # Results and Discussion
 
@@ -1108,7 +1170,7 @@ library(shiny)
 
 [Team will add results and discussion here]
 
----
+***
 
 # Conclusion
 
@@ -1122,7 +1184,7 @@ library(shiny)
 
 [Team will add conclusion here]
 
----
+***
 
 # Appendix: Collaborative Workflow Summary
 
@@ -1147,7 +1209,7 @@ library(shiny)
 
 [What did your team learn about collaborative coding?]
 
----
+***
 
 # Role Responsibilities Reference
 
@@ -1175,7 +1237,7 @@ library(shiny)
 - **Deliverables:** 36-40
 - **Branch name suggestion:** `part4-dashboards`
 
----
+***
 
 **Due Date:** [Two weeks from assignment date]
 
@@ -1185,6 +1247,6 @@ library(shiny)
 3. Dashboard files (app.R, app.py, streamlit_app.py) included in repository
 4. Complete documentation of collaborative workflow
 
----
+***
 
 **Good luck with your collaborative visualization project!**
