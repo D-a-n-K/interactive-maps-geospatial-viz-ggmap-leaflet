@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel, and Jaclyn"
+author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara"
 date: today
 format: 
   pdf:
@@ -15,7 +15,7 @@ execute:
   echo: true
   warning: false
   message: false
-  python: "/opt/anaconda3/envs/textmining/bin/python"
+  python: "/opt/anaconda3/envs/TextMiningLLM/bin/python"
 editor: source
 ---
 
@@ -55,21 +55,19 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 <!-- This section WILL create merge conflicts - that's intentional and part of the learning! -->
 
 **Instructions:** Each team member should add a bullet point below with:
-- Sara Huta
-- Part 3, 4, 5
-- Data visualization in Python, building dashboards in R with Shiny, building dashboards in Python with Streamlit
 
-**Example format:**
-- Jane Smith - Role 1 (Part 1: ggplot2 Fundamentals) - Exploring basic grammar of graphics with diamonds dataset
-- Taib  
-- Part 2
-- My responsibility is write and execute code that illustrates data visualization techniques using ggplot2.
 - **Hope Tatenda Mutema**
-- Part 1: ggplot2 Fundamentals, Part 2: Advanced ggplot2 & External Data
-- I will focus on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
+Part 1: ggplot2 Fundamentals, Part 6 (optional) and Part 7 (optional):
+I will focus on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations. In addition, I will work on the optional parts related to interactive visualizations with htmlwidgets and Google Maps API visualization, which will allow me to further enhance my data visualization skills and explore more advanced techniques in R.
 
+- **Taib**  
+Part 2: Advanced ggplot2 & External Data
+My responsibility is write and execute code that illustrates data visualization techniques using ggplot2.
 
-**Team Member List:** Hope, Taib, Sara, Daniel, and Jaclyn
+- **Sara Huta**
+Part 3, 4, 5: Data visualization in Python, building dashboards in R with Shiny, building dashboards in Python with Streamlit
+
+**Team Member List:** Hope, Taib, Sara
 
 <!-- End of Team Members section -->
 
@@ -86,7 +84,7 @@ You will work in **teams of 3-4 students** based on your assigned Peer Support G
 5. **Open Pull Request** - When ready, create a PR for your work
 6. **Code review** - Review at least one teammate's PR and provide feedback
 7. **Merge** - After approval, merge your PR (resolve conflicts as needed!)
-8. **Final integration** - Once all PRs are merged, assign one temember to render final document to PDF and upload to Canvas for this group assignment (only one person needs to upload the final PDF).
+8. **Final integration** - Once all PRs are merged, assign one team member to render final document to PDF and upload to Canvas for this group assignment (only one person needs to upload the final PDF).
 
 **Timeline**: You have **two weeks** to complete this lab.
 
@@ -118,16 +116,15 @@ The belt and suspenders approach to ensure I am using the correct Python environ
 library(reticulate)
 
 # Set Python path BEFORE loading spacyr - this is critical!
-Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
-Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
+Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
 
-use_condaenv("textmining", required = TRUE)
+use_condaenv("TextMiningLLM", required = TRUE)
 ```
 
 
 ```{r}
 #| label: setup
-#| echo: false
 #| message: false
 #| warning: false
 
