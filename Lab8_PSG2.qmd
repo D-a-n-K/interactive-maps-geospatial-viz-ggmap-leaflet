@@ -122,6 +122,13 @@ Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
 use_condaenv("TextMiningLLM", required = TRUE)
 ```
 
+```{r}
+#| label: setup-google-api
+#| echo: false
+# Set and register Google API key
+Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
+ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
+```
 
 ```{r}
 #| label: setup
@@ -159,7 +166,7 @@ if (!webshot::is_phantomjs_installed()) {
   webshot::install_phantomjs()
 }
 
-# If you are completing the optional Part 7, set up Google API key. Once you have your API key, replace the "GOOGLE_API_KEY" value below with your actual key. Remember to always keep those API keys secure and do not share them publicly.
+# set up Google API key. Once you have your API key, I have stored the GOOGLE_API_Key as an environment variable in my .Renviron file. This allows me to keep the key secure and not hard-code it into my script. 
 
 # Google API key setup (for optional Part 7)
 if (Sys.getenv("GOOGLE_API_KEY") != "") {
@@ -178,7 +185,9 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 
 **Instructions**: After completing all individual sections, your team should work together to write a brief introduction here (2-3 sentences) describing the overall focus and approach of your visualization work.
 
-[Team will add introduction here]
+**Introduction:**
+
+This lab explores data visualization techniques across both R and Python, where we divided responsibilities so that one member focused on ggplot2 fundamentals, another on advanced ggplot2 with external college data, and a third member took on the largest share by covering Python visualization as well as building interactive dashboards in RShiny, PyShiny, and Streamlit. Each member worked on their own Git branch and integrated their work through Pull Requests, with one member taking on the additional responsibility of rendering and submitting the final document. Together, our visualizations reveal meaningful patterns in diamond pricing, college tuition trends, tipping behavior, and word frequency in political speech.
 
 ***
 
@@ -192,17 +201,22 @@ if (Sys.getenv("GOOGLE_API_KEY") != "") {
 - What packages/tools you employed
 - What insights your visualizations revealed
 
-**Format:** 
-```
+**Hope Tatenda Mutema - Part 1:** 
+
+I focused on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
+
 **[Taib] - Part [II]:** [Reading in External Data and Visualizing with ggplot2]
-**Hope Tatenda Mutema - Part 1:** I focused on creating various ggplot2 visualizations using the diamonds dataset, exploring the grammar of graphics, and then working with an external college dataset to create advanced visualizations with custom themes and annotations.
-```
+
 My responsibilities focused on Part II of the lab. The methodologies and visualization techniques I used include scatterplots, line plots, and bar graphs. I primarily used the ggplot2 package for most of visualizations. Patterns in the data suggest that higher-tuition private schools are more frequent (in the dataset) and tend to have higher SAT averages. Both private and public colleges tend to be clustered in the south. Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment.
 
 
-**Sara Huta - Part 3:** Used matplotlib, seaborn and pandas to create visualize the tips dataset in a bar chart, and two boxplots. Visualized the Obama 2009 Inguaral speech in a bar chart and cleaned&tokenized the text data.
+**Sara Huta - Part 3:** 
 
-**Sara Huta - Part 4&5:** Build dashboards with Shiny in R, PyShiny with Python, and Streamlit with Python from the already provided code structures. 
+Used matplotlib, seaborn and pandas to create visualize the tips dataset in a bar chart, and two boxplots. Visualized the Obama 2009 Inguaral speech in a bar chart and cleaned&tokenized the text data.
+
+**Sara Huta - Part 4&5:** 
+
+Build dashboards with Shiny in R, PyShiny with Python, and Streamlit with Python from the already provided code structures. 
 
 <!-- End of Methods Overview -->
 
@@ -262,7 +276,9 @@ The setup chunk has already loaded all required libraries.
 
 ```{r}
 #| label: google-api-setup
+#| echo: false
 # Set and register Google API key
+
 Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
 ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
 
@@ -523,7 +539,7 @@ geom_violin()
 
 # Part 2: Advanced ggplot2 & External Data Visualization
 
-**Assigned to: Role 2 - Advanced ggplot2 & External Data**
+**Assigned to Taib: Role 2 - Advanced ggplot2 & External Data**
 
 **Deliverables: 17-29**
 
@@ -638,7 +654,9 @@ ggplot(data = college) +
 
 ```
 
-**Interpretation:**  Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment. Patterns of SAT averages tend to increase as tuition fees increase in both public and private universites. 
+**Interpretation:**  
+
+Public universities are more associated with low tuition and large enrollments while private ones are more associated with high tuition fees and relatively lower enrollment. Patterns of SAT averages tend to increase as tuition fees increase in both public and private universites. 
 
 ***
 
@@ -886,7 +904,7 @@ ggplot(data = college) +
 
 # Part 3: Data Visualization in Python
 
-**👤 Assigned to: Role 3 - Python Visualization**
+**👤 Assigned to Sara: Role 3 - Python Visualization**
 
 **📊 Deliverables: 30-35**
 
@@ -1044,7 +1062,7 @@ plt.show()
 
 # Part 4 & 5: Building Dashboards with Shiny and Streamlit
 
-**👤 Assigned to: Role 4 - Dashboards**
+**👤 Assigned to Sara: Role 4 - Dashboards**
 
 **📊 Deliverables: 36-40**
 
@@ -1056,13 +1074,13 @@ plt.show()
 
 **Instructions:** Install shiny and shinydashboard packages (code is commented out - only run once).
 
-```{r}
+```r
 #| label: install-shiny
 #| echo: true
 
 # Role 4: Uncomment and run once to install
-#install.packages("shiny")
-#install.packages("shinydashboard")
+install.packages("shiny")
+install.packages("shinydashboard")
 
 ```
 
@@ -1074,24 +1092,24 @@ plt.show()
 
 **Note:** These run interactively in your console - not in the rendered document.
 
-```{r}
+```r
 #| label: shiny-examples
 #| eval: false
 #| echo: true
 
 # Role 4: Run these in your console (one at a time)
-#library(shiny)
-#runExample("01_hello")
-#runExample("02_text")
-#runExample("03_reactivity")
-#runExample("04_mpg")
-#runExample("05_sliders")
-#runExample("06_tabsets")
-#runExample("07_widgets")
-#runExample("08_html")
-#runExample("09_upload")
-#runExample("10_download")
-#runExample("11_timer")
+library(shiny)
+runExample("01_hello")
+runExample("02_text")
+runExample("03_reactivity")
+runExample("04_mpg")
+runExample("05_sliders")
+runExample("06_tabsets")
+runExample("07_widgets")
+runExample("08_html")
+runExample("09_upload")
+runExample("10_download")
+runExample("11_timer")
 ```
 
 ***
@@ -1109,21 +1127,21 @@ plt.show()
 
 **Document your experience:**
 
-```
 # Role 4: Shiny App Documentation
 
 **What I created:** [Describe your app]
 
 **Customizations made:** 
-- Changed the title to "Sara's Shiny App"
+- Changed the title to "PSG2 Shiny App"
 - Tested the interctive slider function 
 
 **How to run:** Run `shiny::runApp("app.R")` in R console
 
-**Screenshots:** [Note: Include screenshots in your final submission]
-```
+![Screenshot: Main app interface](Shiny App.png)
 
-[Add your documentation here]
+**Documentation:** 
+
+The app was very easy to set up and run, it was also very easy to apply edits to the code and see the changes immediately. The interactive slider function was fun to play with and see how it changed the graph. Overall a great tool for visualizing data in an interactive way.
 
 ***
 
@@ -1140,14 +1158,13 @@ plt.show()
 
 **Document your experience:**
 
-```
 # Role 4: PyShiny App Documentation
 
 **What I created:** [Describe your app]
 
 **Customizations made:** 
-- Changed title to "PyShiny"
-- Tested the ineractive slider function and graph
+- Changed title to "PSG2 PyShiny App"
+- Tested the interactive slider function and graph
 - Updated the script for the app to run on web browser 
 
 **How to run:** Run `shiny run --reload app.py --port 8501` in terminal
@@ -1155,11 +1172,13 @@ plt.show()
 http://localhost:8000
 
 **Comparison to RShiny:**
+
 Virtually the same set up and visualization result, only thing is RShiny was immedialty visible on the IDE, while PyShiny took some time to configure and I could only see it from an external website on a web browser. Both very helpful in visualizing data and easy to apply edits to. Lots of formats to choose from for different data outputs. 
  
-```
 
-[Add your documentation here]
+**Documentation:** 
+
+The PyShiny app was very similar to the RShiny app, it was easy to set up and run, and also easy to apply edits to. The interactive slider function was also fun to play with and see how it changed the graph. Overall a great tool for visualizing data in an interactive way, just like RShiny but in Python.
 
 ***
 
@@ -1176,10 +1195,9 @@ Virtually the same set up and visualization result, only thing is RShiny was imm
 
 **Document your experience:**
 
-```
 # Role 4: Streamlit App Documentation
 
-**What I created:** [Describe your app]
+**What I created:** A Streamlit dashboard that visualizes the tips dataset with interactive widgets to filter by day and time, and displays a bar chart of average tips by day.
 
 **Customizations made:** [List changes from template]
 
@@ -1190,9 +1208,8 @@ The streamilit app was more interesting to play with, althought the RShiny app h
 
 **Which do you prefer and why?** 
 I prefer the streamlit app, it has more interaction and has a cleaner look. 
-```
 
-[Add your documentation here]
+![Screenshot: Main app interface](Streamlit.png)
 
 ***
 
@@ -1220,7 +1237,9 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 - Discusses strengths of different visualization types
 - Reflects on the dashboard tools
 
-[Team will add results and discussion here]
+**Team Discussion:**
+
+Comparing R and Python visualization approaches, ggplot2 offers a more structured and layered grammar of graphics system that makes it intuitive to build complex, customized plots incrementally, while Python's matplotlib and seaborn are more flexible but require more manual configuration for polished results. For dashboards, RShiny felt more immediately accessible within the R ecosystem, while Streamlit offered a cleaner and more modern interface with less boilerplate code, making it arguably the most user-friendly of the three dashboard tools explored.
 
 ***
 
@@ -1234,7 +1253,9 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 - What you learned about collaborative coding
 - How these skills apply to real-world data science
 
-[Team will add conclusion here]
+**Team Conclusion:**
+
+Through this lab, we deepened our understanding of data visualization by exploring a range of chart types and tools across both R and Python, learning that the choice of visualization technique and tool depends heavily on the data and the story being told. Collaborating through Git branches and Pull Requests taught us the importance of clear communication and structured workflows when working on shared codebases, as merging contributions from multiple team members requires both technical coordination and careful review. These skills building meaningful visualizations and working collaboratively on code are directly applicable to real-world data science, where teams must communicate insights effectively and manage complex projects together.
 
 ***
 
@@ -1248,18 +1269,17 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 
 | Team Member | PR Title | PR # | Reviewers | Status |
 |------------|----------|------|-----------|--------|
-| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
-| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
-| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
-| [Name] | [PR Title] | [#] | [Names] | [Merged/Pending] |
+| Hope | hope-part-one | [#] | Taib| [Merged] |
+| Taib | taib| [#] | Hope | [Merged] |
+| Sara | Sara| [#] | Taib and Hope | [Merged] |
 
 ## Merge Conflicts Encountered
 
-[Describe any merge conflicts you encountered and how you resolved them]
+When merging branches, we encountered conflicts primarily in the YAML header and the Methods Overview section, as multiple team members had made edits to these shared areas of the document. We resolved these conflicts by communicating through GitHub, carefully reviewing the differing versions, and manually selecting or combining the correct content before completing the merge.
 
 ## Lessons Learned
 
-[What did your team learn about collaborative coding?]
+We learned that clear communication and consistent Git practices are essential when multiple people are working on the same codebase, as even small overlapping edits can create conflicts that require careful resolution. Dividing work into clearly defined roles and branches made collaboration more manageable, and the Pull Request review process helped us catch errors and improve each other's code before merging into the main branch.
 
 ***
 
