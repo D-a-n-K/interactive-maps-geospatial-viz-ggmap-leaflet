@@ -1,0 +1,88 @@
+---
+title: "Maps"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Geolines Map
+
+Our sample dataset is included in the library, `data_geo_lines_plot` and comprises a set of send-receive coordinates. The `geo_lines_plot` function requires a dataset with at least the following columns:
+
+- start.latitude
+- start.longitude
+- end.latitude
+- end.longitude
+
+```{r}
+library(oidnChaRts)
+head(data_geo_lines_plot)
+```
+
+Hat tip to [http://personal.tcu.edu/kylewalker/interactive-flow-visualization-in-r.html](http://personal.tcu.edu/kylewalker/interactive-flow-visualization-in-r.html) for the `geospheres` library which computes [great circles](https://en.wikipedia.org/wiki/Great_circle).
+
+## Leaflet
+
+### Basic Example
+
+The minimal number of arguments required for `geo_line_map` are as follows:
+
+```{r}
+library(leaflet)
+geo_lines_plot(data_geo_lines_plot, 
+              library = "leaflet")
+```
+
+There are additional arguments that may control the `line.options` and `termini.options` (the dots at each end of the geo_line)
+
+```{r}
+geo_lines_plot(data_geo_lines_plot, 
+              library = "leaflet",
+              line.options = list(weight = 3))
+```
+
+The leaflet map produced by `geo_lines_plot` can be used in pipe chains like any other leaflet map:
+
+```{r}
+geo_lines_plot(data_geo_lines_plot, 
+              library = "leaflet",
+              line.options = list(weight = 3)) %>%
+  addProviderTiles("Stamen.Watercolor")
+```
+
+### Tooltips
+
+The `geo_lines_plot` function has been designed for tooltips to be easily added to the lines of termini, in the example below a popup will show when a geo_line is clicked.
+
+```{r}
+label_journey <- function(start.location = NA, end.location = NA){
+  paste0(
+    "<p>start: ", start.location,
+    "</p>",
+    "<p>end: ", end.location
+  )
+}
+geo_lines_plot(data_geo_lines_plot, 
+              library = "leaflet",
+              line.popup = ~label_journey(start.location, end.location),
+              line.options = list(weight = 3)) %>%
+  addProviderTiles("Stamen.Watercolor")
+```
+
+
+# Choropleth from points
+
+Our sample dataset is included in the library, `data_geo_points` and comprises a set of coordinates . The `geo_lines_plot` function requires a dataset with at least the following columns:
+
+- start.latitude
+- start.longitude
+- end.latitude
+- end.longitude
+
+```{r}
+library(oidnChaRts)
+head(data_geo_lines_plot)

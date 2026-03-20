@@ -1,0 +1,71 @@
+---
+title: "Geo Choropleth Chart"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# Overview of function
+
+`geo_choropleth_chart` can be used to create the following kinds of charts:
+
+- Geo choropleth charth
+
+Geo choropleth charts contain geographic regions (i.e. countries) which are shaded/coloured according to a shared property of all regions (i.e. population). Choropleth are extrmely popular charts for comparing regions to one another, however they require significant effort to be put into curating the shapefiles that constitute the geographic regions.
+
+```{r, echo=FALSE}
+## TO DO: Make an example
+```
+
+
+As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
+
+# data_world_shapefiles
+
+```{r}
+library(oidnChaRts)
+```
+
+This vignette covers the use of geo choropleth charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use a set of shapefiles from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/. The shapesfiles have been pre-manipulated into a `SpatialPolygonsDataFrame` object ready for manipulation in R, here's a summary of the dataset:
+
+```{r}
+summary(data_world_shapefiles)
+```
+
+Rather than plotting all of the countries of the world, let's restrict ourselves to Asia:
+
+```{r}
+asia_shapefiles <- data_world_shapefiles %>%
+  filter(continent == "Asia")
+```
+
+# Colorscales
+
+Before creating our choropleth we must consider the information communicated by the colour of the map regions, is the measure:
+
+- A categorical variable (i.e. Southern Asia, Western Asia, Central Asia)
+- A continuous variable (i.e. population of the region)
+
+These two types of variable work best with different types of legend, our generic `geo_choropleth_chart` function must therefore
+
+
+```{r,eval=FALSE}
+geo_choropleth_chart(
+  spdf = ,
+  library = ,
+  region.border.width = ,
+  region.border.color = ,
+  region.value = ,
+  legend = list(
+    type = "continuous", # default 
+    rcolorbrewer.palette = , # NULL if 
+    minColor = NULL, # null if not 
+  )
+)
+```

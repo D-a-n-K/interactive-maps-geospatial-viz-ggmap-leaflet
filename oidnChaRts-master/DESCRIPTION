@@ -1,0 +1,32 @@
+Package: oidnChaRts
+Type: Package
+Title: Utility Functions For htmlwidget Visualisations
+Version: 0.1.0
+Authors@R: person("Martin", "Hadley", email = "martinjohnhadley@gmail.com", role = c("aut", "cre"))
+Description: Provides templates for creating rich interactive charts/maps/networks, including; bar charts, time series,
+    choropleth, scatter geo plots, ego networks and more. All charts are created using htmlwidget libraries, the most widely 
+    used libraries are; plotly, highcharter, leaflet and visNetwork. Note that highcharter and other libraries have 
+    restrictive licenses - refer to the individual libraries for further information.
+License: MIT + file LICENSE
+LazyData: TRUE
+Imports:
+    lazyeval,
+    stats,
+    sp,
+    tidyverse,
+    dplyr (>= 0.3.0.1),
+    tidyr,
+    geosphere,
+    htmltools,
+    htmlwidgets,
+    jsonlite,
+    leaflet,
+    highcharter,
+    plotly,
+    scales
+URL: http://ox-it.github.io/OxfordIDN_htmlwidgets
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr

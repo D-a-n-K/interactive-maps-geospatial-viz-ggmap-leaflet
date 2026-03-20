@@ -1,6 +1,6 @@
 ---
 title: "Lab 8: Data Visualization, Dashboards, and Collaborative Coding in R and Python"
-author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara"
+author: "Team Name: PSG2 | Team Members: Hope, Taib, Sara, Daniel"
 date: today
 format: 
   pdf:
@@ -11,11 +11,12 @@ format:
       text: |
         \usepackage{fvextra}
         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+engine: knitr
 execute:
   echo: true
   warning: false
   message: false
-  python: "/opt/anaconda3/envs/TextMiningLLM/bin/python"
+  python: "/Users/chavez/.virtualenvs/r-reticulate/bin/python"
 editor: source
 ---
 
@@ -67,7 +68,11 @@ My responsibility is write and execute code that illustrates data visualization 
 - **Sara Huta**
 Part 3, 4, 5: Data visualization in Python, building dashboards in R with Shiny, building dashboards in Python with Streamlit
 
-**Team Member List:** Hope, Taib, Sara
+- **Daniel**
+Part 6 and Part 7: Interactive Data Visualizations and Google Maps API
+My responsibility is to build interactive data visualizations using htmlwidgets packages including highcharter, leaflet, and plotly, as well as creating choropleth maps from shapefiles and Gapminder data. I also worked on mapping visualizations using the Google Maps API through ggmap, including geocoding locations and plotting them across various map types. This involved troubleshooting deprecated package functions in oidnChaRts and configuring both Google and Stadia Maps API keys.
+
+**Team Member List:** Hope, Taib, Sara, Daniel
 
 <!-- End of Team Members section -->
 
@@ -114,20 +119,24 @@ The belt and suspenders approach to ensure I am using the correct Python environ
 ```{r}
 #| label: setup-reticulate
 library(reticulate)
+use_virtualenv("/Users/chavez/.virtualenvs/r-reticulate", required = TRUE)
 
 # Set Python path BEFORE loading spacyr - this is critical!
-Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
-Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/TextMiningLLM/bin/python')
+# Sys.setenv(RETICULATE_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
+# Sys.setenv(SPACY_PYTHON = '/opt/anaconda3/envs/textmining/bin/python')
 
-use_condaenv("TextMiningLLM", required = TRUE)
+# use_condaenv("textmining", required = TRUE)
 ```
+
+**Note From Daniel** I updated the API key from Hope's to mine since I am completing part 7.
 
 ```{r}
 #| label: setup-google-api
 #| echo: false
-# Set and register Google API key
-Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
+# Set and register Google API key and Stadiamaps API Key
+Sys.setenv(GOOGLE_API_KEY = "AIzaSyAJVlX2i8GMWZP4RyywENZCf9goVrNaehU")
 ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
+ggmap::register_stadiamaps(key = "052716d8-245a-4175-a07f-59959c856f67")
 ```
 
 ```{r}
@@ -214,9 +223,13 @@ My responsibilities focused on Part II of the lab. The methodologies and visuali
 
 Used matplotlib, seaborn and pandas to create visualize the tips dataset in a bar chart, and two boxplots. Visualized the Obama 2009 Inguaral speech in a bar chart and cleaned&tokenized the text data.
 
-**Sara Huta - Part 4&5:** 
+**Sara Huta - Part 4 & 5:** 
 
 Build dashboards with Shiny in R, PyShiny with Python, and Streamlit with Python from the already provided code structures. 
+
+**Daniel Chavez - Part 6 & 7:**
+
+Used highcharter and plotly to build interactive stacked bar charts from the oidnChaRts dataset, replacing deprecated functions with modern equivalents. Created leaflet maps with standard, circle, and clustered markers, and built a choropleth map using Gapminder data and ESRI shapefiles. For Part 7, used ggmap with the Google Maps API to geocode locations and plot them across terrain, satellite, and Stamen map types.
 
 <!-- End of Methods Overview -->
 
@@ -273,17 +286,18 @@ The setup chunk has already loaded all required libraries.
 ***
 
 ## Google API setup 
+**Note From Daniel** I updated the API key from Hope's to mine since I am completing part 7.
 
 ```{r}
 #| label: google-api-setup
 #| echo: false
 # Set and register Google API key
 
-Sys.setenv(GOOGLE_API_KEY = "AIzaSyDUrw02J-4gwNdIgXwpxSMiquN2hc7BK0Y")
+Sys.setenv(GOOGLE_API_KEY = "AIzaSyAJVlX2i8GMWZP4RyywENZCf9goVrNaehU")
 ggmap::register_google(key = Sys.getenv("GOOGLE_API_KEY"))
 
 # Use the correct conda environment
-reticulate::use_condaenv("TextMiningLLM", required = TRUE)
+# reticulate::use_condaenv("textmining", required = TRUE)
 
 # Verify Python configuration (optional)
 # reticulate::py_config()
@@ -1215,6 +1229,506 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 
 **Role 4 Complete!** 
 
+# Part 6 (Optional): Interactive Data Visualizations
+
+**Assigned to Daniel Chavez: Optional Part 6 - htmlwidgets**
+
+**Focus:** Building rich, interactive data visualizations using htmlwidgets packages including highcharter, leaflet, plotly, DT, and sf. These visualizations are suitable for publishing on the web with RPubs, RMarkdown, Quarto, or RShiny.
+
+Loading the htmlwidget libraries that will be used throughout Part 6. Each package provides a different type of interactive visualization.
+```{r}
+#| label: part6-libraries
+#| message: false
+#| warning: false
+library(highcharter)
+library(leaflet)
+library(plotly)
+library(DT)
+library(sf)
+library(gapminder)
+library(geojsonio)
+library(oidnChaRts)
+library(htmlwidgets)
+```
+
+***
+## Deliverable 41: Prepare the Data We Will Plot
+
+One of the challenges of using these interactive data visualizations is rendering them to PDF, which is a static format. When rendering to html, all of the interactive features stay in place. To enable these interactive visualizations to render to PDF, the code uses `saveWidget()` and `webshot` to convert the interactive widget to a static PNG image.
+
+Preparing the data from the oidnChaRts package for the interactive visualizations, including the stacked bar chart data and shapefiles for the choropleth map.
+```{r}
+#| label: data_prep
+#| results: asis
+#| echo: true
+
+# Prepare the data for visualizations
+data_to_plot <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count), .groups = "drop")
+
+# Load shapefiles for the choropleth map
+esri_shapefile <- read_sf("data/world-shape-files/")
+geojson_shapefile <- read_sf("data/world-geojson.json")
+shp_as_sf <- read_sf("data/world-shape-files/")
+converted_geojson <- geojson_list(shp_as_sf)
+
+# Prepare data for the Gapminder-based choropleth
+gapminder_most_recent <- gapminder %>%
+  filter(year == max(year))
+```
+
+***
+
+## Deliverable 42: View Data in Highcharter
+
+The `oidnChaRts::stacked_bar_chart()` function used in the lab instructions is no longer compatible with current versions of dplyr and tidyr. The package internally calls `select_()` and `spread_()`, which have been fully removed from the tidyverse. Steps 2 and 3 below use `highcharter::hchart()` and `plotly::plot_ly()` directly to produce the same stacked bar charts.
+
+
+```{r}
+#| label: highcharter_stacked_bar
+#| results: asis
+#| echo: true
+
+# Generate the interactive stacked bar chart directly with highcharter
+hc_chart <- hchart(data_to_plot, "bar", hcaes(x = country_group, y = total, group = occupation)) %>%
+  hc_plotOptions(series = list(stacking = "normal")) %>%
+  hc_title(text = "Stacked Bar Chart: Occupation by Country Group")
+
+# Display interactively
+if (interactive()) {
+  print(hc_chart)
+}
+
+# Handle PDF rendering separately
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  
+  html_file <- file.path("figures", "hc_chart.html")
+  png_file <- file.path("figures", "hc_chart.png")
+  
+  if (file.exists(html_file)) file.remove(html_file)
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  saveWidget(hc_chart, file = html_file, selfcontained = TRUE)
+  webshot::webshot(html_file, file = png_file)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  hc_chart
+}
+```
+
+***
+
+## Deliverable 43: View Data in Plotly Stacked Bar Chart
+
+Now using the plotly package to visualize the same stacked bar chart data. Plotly offers a different set of interactive features compared to highcharter, including zoom, pan, and hover tooltips.
+
+```{r}
+#| label: plotly_stacked_bar_chart
+#| results: asis
+#| echo: true
+
+# Generate the interactive stacked bar chart directly with plotly
+stacked_chart <- plot_ly(data_to_plot, 
+                         x = ~total, 
+                         y = ~country_group, 
+                         color = ~occupation, 
+                         type = "bar", 
+                         orientation = "h") %>%
+  layout(barmode = "stack",
+         margin = list(l = 150), 
+         yaxis = list(title = ""),
+         xaxis = list(title = "Total"),
+         title = "Stacked Bar Chart: Occupation by Country Group")
+
+# Display interactively
+if (interactive()) {
+  print(stacked_chart)
+}
+
+# Handle PDF rendering separately
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  
+  html_file <- file.path("figures", "stacked_chart.html")
+  png_file <- file.path("figures", "stacked_chart.png")
+  
+  if (file.exists(html_file)) file.remove(html_file)
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  saveWidget(stacked_chart, file = html_file, selfcontained = TRUE)
+  webshot::webshot(html_file, file = png_file)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  stacked_chart
+}
+```
+
+***
+
+## Deliverable 44: View Leaflet Map Plot
+
+Creating an interactive Leaflet map with markers. The `data_geo_marker_plot` dataset from oidnChaRts contains geographic coordinates and city names, which are plotted as clickable markers on the map.
+```{r}
+#| label: leaflet_map_plot
+#| eval: false
+#| echo: true
+
+# Generate the interactive Leaflet map
+leaflet_map <- data_geo_marker_plot %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(label = ~city)
+
+# Display interactively
+if (interactive()) {
+  print(leaflet_map)
+}
+
+# Handle PDF rendering separately
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  html_file <- file.path("figures", "leaflet_map.html")
+  png_file <- file.path("figures", "leaflet_map.png")
+  
+  if (file.exists(html_file)) file.remove(html_file)
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  saveWidget(leaflet_map, file = html_file, selfcontained = TRUE)
+  webshot::webshot(html_file, file = png_file)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  leaflet_map
+}
+```
+
+***
+
+## Deliverable 45: View a Leaflet Map with Circle Markers
+
+Modifying the leaflet map to use circle markers instead of pin markers. The circle size is proportional to the count variable, giving a visual sense of scale for each city.
+```{r}
+#| label: leaflet_circle_marker_map
+#| results: asis
+#| echo: true
+
+# Generate the Leaflet map with circle markers
+leaflet_circle_map <- data_geo_marker_plot %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(radius = ~count / 8, label = ~city)
+
+# Display interactively
+if (interactive()) {
+  print(leaflet_circle_map)
+}
+
+# Handle PDF rendering separately
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  html_file <- file.path("figures", "leaflet_circle_map.html")
+  png_file <- file.path("figures", "leaflet_circle_map.png")
+  
+  if (file.exists(html_file)) file.remove(html_file)
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  saveWidget(leaflet_circle_map, file = html_file, selfcontained = TRUE)
+  webshot::webshot(html_file, file = png_file)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  leaflet_circle_map
+}
+```
+
+***
+## Deliverable 46: View Leaflet Map with Clustered Markers
+
+Adding cluster options to the leaflet map so that nearby markers are grouped together when zoomed out. Clicking on a cluster expands it to show the individual markers.
+```{r}
+#| label: leaflet_clustered_marker_map
+#| results: asis
+#| echo: true
+
+# Generate the Leaflet map with clustered markers
+leaflet_cluster_map <- data_geo_marker_plot %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(radius = ~count / 8, label = ~city, clusterOptions = markerClusterOptions())
+
+# Display interactively
+if (interactive()) {
+  print(leaflet_cluster_map)
+}
+
+# Handle PDF rendering separately
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  html_file <- file.path("figures", "leaflet_cluster_map.html")
+  png_file <- file.path("figures", "leaflet_cluster_map.png")
+  
+  if (file.exists(html_file)) file.remove(html_file)
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  saveWidget(leaflet_cluster_map, file = html_file, selfcontained = TRUE)
+  webshot::webshot(html_file, file = png_file)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  leaflet_cluster_map
+}
+```
+
+***
+
+## Deliverable 47: Read in Shapefiles and View in Choropleth Map
+
+Reading in the ESRI shapefiles and converting them to GeoJSON format for use with highcharter. The choropleth map displays Gapminder population data for 2007, with countries colored by population size.
+```{r}
+#| label: choropleth_map
+#| results: asis
+#| echo: true
+
+# Load the shapefiles
+esri_shapefile <- read_sf("data/world-shape-files/")
+converted_geojson <- geojson_list(esri_shapefile)
+
+# Prepare data for mapping
+gapminder_most_recent <- gapminder %>%
+  filter(year == max(year))
+
+# Create an interactive highcharter map
+choropleth_highchart <- highchart(type = "map") %>%
+  hc_add_series_map(
+    map = converted_geojson,
+    df = gapminder_most_recent,
+    value = "pop",
+    joinBy = c("name_long", "country")
+  ) %>%
+  hc_title(text = "Population Choropleth for 2007 (Source: Gapminder)")
+
+if (interactive()) {
+  print(choropleth_highchart)
+}
+
+# Handle PDF rendering using ggplot2 + sf
+if (knitr::is_latex_output()) {
+  if (!dir.exists("figures")) dir.create("figures")
+  png_file <- file.path("figures", "choropleth_map.png")
+  
+  if (file.exists(png_file)) file.remove(png_file)
+  
+  gg_choropleth <- ggplot(data = esri_shapefile) +
+    geom_sf(aes(fill = pop_est), color = "black") +
+    scale_fill_viridis_c(na.value = "gray") +
+    theme_minimal()
+  
+  ggsave(filename = png_file, plot = gg_choropleth, width = 7, height = 5, dpi = 300)
+  
+  if (!file.exists(png_file)) {
+    stop("Error: The PNG file was not saved correctly.")
+  }
+  knitr::include_graphics(png_file)
+} else {
+  choropleth_highchart
+}
+```
+
+***
+
+# Part 7 (Optional): Plotting Data Visualizations on Maps Using the Google API
+
+**👤 Assigned to Daniel Chavez: Optional Part 7 - Google Maps API**
+
+**Focus:** Using the ggmap package and the Google Maps API to create map-based data visualizations, including geocoding locations and plotting them on various map types.
+
+The Google API key was registered in the setup chunk at the top of the document. This section uses `ggmap` to access Google Maps as the base layer for our map visualizations.
+
+***
+
+## Deliverable 48: Load ggmap Package and Register Google API Key
+
+The ggmap package and Google API key were already loaded and registered in the setup chunk above. Verifying the connection is active.
+```{r}
+#| label: part7-verify-api
+#| echo: true
+library(ggmap)
+ggmap::has_google_key()
+```
+
+***
+
+## Deliverable 49: Explore Basic Map Functions in ggmap
+
+Exploring the basic map functions in ggmap including `qmap()` for quick maps, `get_map()` for retrieving map data, and `ggmap()` for plotting stored maps. Starting with a quick map of New York City.
+```{r}
+#| label: qmap-nyc
+#| echo: true
+qmap("New York, NY")
+```
+
+Adjusting the zoom level to see more detail. Larger zoom values zoom in, smaller values zoom out.
+```{r}
+#| label: qmap-nyc-zoom
+#| echo: true
+qmap("New York, NY", zoom = 15)
+```
+
+Zooming out to see the broader east coast region.
+```{r}
+#| label: qmap-nyc-wide
+#| echo: true
+qmap("New York, NY", zoom = 7)
+```
+
+Creating a reusable map object with `get_map()` and plotting it with `ggmap()`.
+```{r}
+#| label: nyc-map-object
+#| echo: true
+nyc_map <- get_map("New York, NY", zoom = 10)
+ggmap(nyc_map)
+```
+
+***
+
+## Deliverable 50: Geocoding and Plotting Maps
+
+Using the `geocode()` function to get latitude and longitude coordinates for locations. Creating objects for New York City and the White House.
+```{r}
+#| label: geocoding
+#| echo: true
+nyc <- geocode("New York, NY")
+nyc
+
+whitehouse <- geocode("White House")
+whitehouse
+```
+
+Plotting the map centered on the White House using wrapped functions.
+```{r}
+#| label: whitehouse-map
+#| echo: true
+ggmap(get_map(whitehouse))
+```
+
+***
+
+## Deliverable 51: Exploring Map Types and Plotting Locations on Maps
+
+Creating a zoomed-in map of the White House area and exploring different map types available in ggmap.
+```{r}
+#| label: whitehouse-zoom
+#| echo: true
+#| eval: true
+whitehousemap <- ggmap(get_map(whitehouse, zoom = 18))
+whitehousemap
+```
+
+Trying out the different map types available in ggmap including terrain, roadmap, satellite, and hybrid.
+```{r}
+#| label: map-types
+#| echo: true
+ggmap(get_map(nyc, maptype = "terrain"))
+ggmap(get_map(nyc, maptype = "roadmap"))
+ggmap(get_map(nyc, maptype = "satellite"))
+ggmap(get_map(nyc, maptype = "hybrid"))
+```
+
+***
+
+## Deliverable 52: Plotting Locations on Maps
+
+Combining geocoding and map plotting to display specific locations on a US map. First geocoding NYC and USA, then plotting NYC as a red point on the country map.
+```{r}
+#| label: plot-nyc-on-usa
+#| echo: true
+nyc <- geocode("New York, NY")
+usa <- geocode("United States")
+
+ggmap(get_map(usa, zoom = 3)) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = nyc)
+```
+
+Geocoding and plotting multiple locations on the same map.
+```{r}
+#| label: plot-multiple-locations
+#| echo: true
+placenames <- c("New York, NY", "White House", "Mt. Rushmore", "The Alamo")
+locations <- geocode(placenames)
+places <- tibble(name = placenames, lat = locations$lat, lon = locations$lon)
+
+ggmap(get_map(usa, zoom = 3)) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = places)
+```
+
+***
+
+## Deliverable 53: Adding Labels and Changing Map Types
+
+Adding text labels to the plotted locations so each point is clearly identified on the map.
+```{r}
+#| label: labels-on-map
+#| echo: true
+ggmap(get_map(usa, zoom = 4)) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = places) +
+  geom_text(mapping = aes(x = lon, y = lat, label = name), color = "red", data = places)
+```
+
+Nudging the labels slightly above the points for better readability.
+
+```{r}
+#| label: nudged-labels
+#| echo: true
+ggmap(get_map(usa, zoom = 4)) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = places) +
+  geom_text(mapping = aes(x = lon, y = lat, label = name), color = "red", data = places, nudge_y = 1)
+```
+
+Changing the map background to toner-background for a cleaner look with labeled points.
+
+**Note**: The maptype names in ggmap have changed in recent versions. The old names like "toner-background" and "watercolor" are now prefixed with stamen_ (e.g., "stamen_toner_background", "stamen_watercolor"). The code below uses the updated names.
+```{r}
+#| label: toner-map
+#| echo: true
+ggmap(get_map(usa, zoom = 4, maptype = "stamen_toner_background")) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = places) +
+  geom_text(mapping = aes(x = lon, y = lat, label = name), color = "red", data = places, nudge_y = 1)
+```
+
+Trying the watercolor map type for a more artistic rendering.
+```{r}
+#| label: watercolor-map
+#| echo: true
+ggmap(get_map(usa, zoom = 4, maptype = "stamen_watercolor")) +
+  geom_point(mapping = aes(x = lon, y = lat), color = "red", data = places) +
+  geom_text(mapping = aes(x = lon, y = lat, label = name), color = "red", data = places, nudge_y = 2)
+```
+
+***
+
+**Optional Parts 6 & 7 Complete!**
+
+***
+
 **Next steps:**
 1. Ensure all three app files (app.R, app.py, streamlit_app.py) are in your repository
 2. Add your methodology to the "Methods Overview" section above (2-3 sentences describing your approach)
@@ -1223,8 +1737,6 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 5. Push your branch to GitHub
 6. Open a Pull Request
 7. Include app files in final submission
-
-***
 
 # Results and Discussion
 
@@ -1239,7 +1751,7 @@ I prefer the streamlit app, it has more interaction and has a cleaner look.
 
 **Team Discussion:**
 
-Comparing R and Python visualization approaches, ggplot2 offers a more structured and layered grammar of graphics system that makes it intuitive to build complex, customized plots incrementally, while Python's matplotlib and seaborn are more flexible but require more manual configuration for polished results. For dashboards, RShiny felt more immediately accessible within the R ecosystem, while Streamlit offered a cleaner and more modern interface with less boilerplate code, making it arguably the most user-friendly of the three dashboard tools explored.
+Comparing R and Python visualization approaches, ggplot2 offers a more structured and layered grammar of graphics system that makes it intuitive to build complex, customized plots incrementally, while Python's matplotlib and seaborn are more flexible but require more manual configuration for polished results. For dashboards, RShiny felt more immediately accessible within the R ecosystem, while Streamlit offered a cleaner and more modern interface with less boilerplate code, making it arguably the most user-friendly of the three dashboard tools explored. The optional interactive visualization sections demonstrated the power of htmlwidgets for creating web-ready charts and maps directly in R, with highcharter and leaflet offering rich interactivity that static ggplot2 plots cannot provide. The Google Maps API integration through ggmap showed how geocoding and map layering can bring geographic context to data analysis.
 
 ***
 
@@ -1272,6 +1784,7 @@ Through this lab, we deepened our understanding of data visualization by explori
 | Hope | hope-part-one | [#] | Taib| [Merged] |
 | Taib | taib| [#] | Hope | [Merged] |
 | Sara | Sara| [#] | Taib and Hope | [Merged] |
+| Daniel | daniel-parts-6-7 | [#] | Hope | [Pending] |
 
 ## Merge Conflicts Encountered
 
@@ -1279,7 +1792,7 @@ When merging branches, we encountered conflicts primarily in the YAML header and
 
 ## Lessons Learned
 
-We learned that clear communication and consistent Git practices are essential when multiple people are working on the same codebase, as even small overlapping edits can create conflicts that require careful resolution. Dividing work into clearly defined roles and branches made collaboration more manageable, and the Pull Request review process helped us catch errors and improve each other's code before merging into the main branch.
+We learned that clear communication and consistent Git practices are essential when multiple people are working on the same codebase, as even small overlapping edits can create conflicts that require careful resolution. Dividing work into clearly defined roles and branches made collaboration more manageable, and the Pull Request review process helped us catch errors and improve each other's code before merging into the main branch. We also learned the importance of properly configuring API keys for map-based visualizations. Working with the Google Maps and Stadia Maps APIs required enabling specific services, linking billing, and registering keys within R, all of which are practical skills for working with external data services in real-world projects.
 
 ***
 
@@ -1309,7 +1822,11 @@ We learned that clear communication and consistent Git practices are essential w
 - **Deliverables:** 36-40
 - **Branch name suggestion:** `part4-dashboards`
 
-***
+## Role 5: Interactive Visualizations & Google Maps API
+- **Parts 6 & 7 (Optional):** htmlwidgets and Google Maps API
+- **Focus:** Interactive charts with highcharter and plotly, leaflet maps, choropleth maps, geocoding and plotting with ggmap
+- **Deliverables:** Part 6 Steps 1-7, Part 7 Steps 1-6
+- **Branch name suggestion:** `parts6-7-interactive-maps`
 
 **Due Date:** [Two weeks from assignment date]
 

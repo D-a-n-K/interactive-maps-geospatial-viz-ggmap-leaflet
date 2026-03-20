@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# oidnChaRts
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/oidnChaRts)](https://cran.r-project.org/package=oidnChaRts)
+[![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRts.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+[![codecov](https://codecov.io/gh/ox-it/oidnChaRts/branch/master/graph/badge.svg)](https://codecov.io/gh/ox-it/oidnChaRts)
+
+
+A collection of functions for building generic interactive `htmlwidget` visualisations, primarily to compare library "A" vs "B" but also usable in their own right.
+
+<img src="data-raw/oidnChaRt-sticker.png" width="100px">
+
+Functions are in general called as follows:
+
+```{r geo_lines_map, eval=FALSE}
+library(oidnChaRts)
+geo_lines_plot(data_geo_lines_plot, 
+              library = "leaflet")
+```
+<img src="README-geo_lines_map.png" width="400">
+
+# Installing
+
+This library is unlikely to be submitted to CRAN, it must be installed as follows:
+
+```{r, eval=FALSE}
+devtools::install_github("ox-it/oidnChaRts", build_vignettes = TRUE)
+```
+
+# License
+
+Please note that the examples within this package use JavaScript libraries that have restrictive licensing conditions.
+
+The `highcharter` library is dependent on [highcharts.com](highcharts.com) which is free for non-commercial use only. Please review the licensing options and terms before using this software, as the oidnChaRts license neither provides nor implies a license for Highcharts. 
+
+All code within this library is made available under the MIT License.
+
+# Credits
+
+The logo for this library uses the "ALL OF THE X" meme inspired by the wonderful work of Hyperbole and a Half - http://hyperboleandahalf.blogspot.com/2010/06/this-is-why-ill-never-be-adult.html
+
+The majority of the credit for this library belongs to the `htmlwidget` library developers, including:
+
+- [https://github.com/jbkunst/highcharter](https://github.com/jbkunst/highcharter)
+
+- [https://github.com/ramnathv/htmlwidgets](https://github.com/ramnathv/htmlwidgets)
+
+- [https://github.com/rstudio/leaflet](https://github.com/rstudio/leaflet)
+
+- [https://github.com/ropensci/plotly](https://github.com/ropensci/plotly)
